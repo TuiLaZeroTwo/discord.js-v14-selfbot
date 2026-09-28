@@ -79,6 +79,7 @@ const handlers = Object.fromEntries([
   ['VOICE_CHANNEL_STATUS_UPDATE', require('./VOICE_CHANNEL_STATUS_UPDATE')],
   ['MESSAGE_POLL_VOTE_ADD', require('./MESSAGE_POLL_VOTE_ADD')],
   ['MESSAGE_POLL_VOTE_REMOVE', require('./MESSAGE_POLL_VOTE_REMOVE')],
+  ['RATE_LIMITED', require('./RATE_LIMITED')],
 ]);
 
 module.exports = handlers;

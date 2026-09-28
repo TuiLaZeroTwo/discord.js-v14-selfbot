@@ -176,6 +176,8 @@ Permissions.FLAGS = {
   SET_VOICE_CHANNEL_STATUS: 1n << 48n,
   SEND_POLLS: 1n << 49n,
   USE_EXTERNAL_APPS: 1n << 50n,
+  PIN_MESSAGES: 1n << 51n,
+  BYPASS_SLOWMODE: 1n << 52n,
 };
 
 /**

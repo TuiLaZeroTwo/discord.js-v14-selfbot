@@ -95,7 +95,7 @@ class RelationshipManager extends BaseManager {
       id: key,
       type: RelationshipTypes[value],
       nickname: this.friendNicknames.get(key),
-      since: this.sinceCache.get(key).toISOString(),
+      since: this.sinceCache.get(key)?.toISOString() ?? null,
     }));
   }
 
@@ -123,7 +123,7 @@ class RelationshipManager extends BaseManager {
     if (user instanceof GuildMember) return user.user.id;
     if (user instanceof Message) return user.author.id;
     if (user instanceof User) return user.id;
-    return user.match(/\d{17,19}/)?.[0] || null;
+    return typeof user === 'string' ? user.match(/\d{17,19}/)?.[0] || null : null;
   }
 
   /**
@@ -168,8 +168,6 @@ class RelationshipManager extends BaseManager {
    * @returns {Promise<boolean>}
    */
   async deleteRelationship(user) {
-    throw new Error('Risky action, not finished yet.');
-    // eslint-disable-next-line no-unreachable
     const id = this.resolveId(user);
     if (
       ![RelationshipTypes.FRIEND, RelationshipTypes.BLOCKED, RelationshipTypes.PENDING_OUTGOING].includes(
@@ -190,8 +188,6 @@ class RelationshipManager extends BaseManager {
    * @returns {Promise<boolean>}
    */
   async sendFriendRequest(options) {
-    throw new Error('Risky action, not finished yet.');
-    // eslint-disable-next-line no-unreachable
     const id = this.resolveId(options);
     if (id) {
       await this.client.api.users['@me'].relationships[id].put({
@@ -218,8 +214,6 @@ class RelationshipManager extends BaseManager {
    * @returns {Promise<boolean>}
    */
   async addFriend(user) {
-    throw new Error('Risky action, not finished yet.');
-    // eslint-disable-next-line no-unreachable
     const id = this.resolveId(user);
     // Check if already friends
     if (this.cache.get(id) === RelationshipTypes.FRIEND) return Promise.resolve(false);
@@ -260,8 +254,6 @@ class RelationshipManager extends BaseManager {
    * @returns {Promise<boolean>}
    */
   async addBlocked(user) {
-    throw new Error('Risky action, not finished yet.');
-    // eslint-disable-next-line no-unreachable
     const id = this.resolveId(user);
     // Check
     if (this.cache.get(id) === RelationshipTypes.BLOCKED) return Promise.resolve(false);

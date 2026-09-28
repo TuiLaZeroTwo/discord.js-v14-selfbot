@@ -680,7 +680,7 @@ class Client extends BaseClient {
         }
         const getForm = await this.api
           .guilds(i.guild?.id)
-          ['member-verification'].get({ query: { with_guild: false, invite_code: this.code } })
+          ['member-verification'].get({ query: { with_guild: false, invite_code: code } })
           .catch(() => {});
         if (getForm && getForm.form_fields[0]) {
           const form = Object.assign(getForm.form_fields[0], { response: true });
@@ -706,7 +706,7 @@ class Client extends BaseClient {
   redeemNitro(nitro, channel, paymentSourceId) {
     if (typeof nitro !== 'string') throw new Error('INVALID_NITRO');
     const nitroCode =
-      nitro.match(/(discord.gift|discord.com|discordapp.com\/gifts)\/(\w{16,25})/) ||
+      nitro.match(/(discord\.gift\/|discord\.com\/gifts\/|discordapp\.com\/gifts\/)(\w{16,25})/) ||
       nitro.match(/(discord\.gift\/|discord\.com\/gifts\/|discordapp\.com\/gifts\/)(\w+)/);
     if (!nitroCode) return false;
     const code = nitroCode[2];

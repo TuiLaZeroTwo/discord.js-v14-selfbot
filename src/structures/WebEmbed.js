@@ -1,6 +1,6 @@
 'use strict';
 
-const baseURL = 'https://webembed-sb.onrender.com/embed?';
+const baseURL = 'https://webembed-sb.onrender.com/embed?'; // Ponytail: third-party free-tier host; self-host proxy and set WebEmbed.baseURL when it dies
 const hiddenCharter =
   '||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||||​||';
 const { RangeError } = require('../errors');
@@ -15,6 +15,12 @@ const Util = require('../util/Util');
  * - Description limit 350 characters
  */
 class WebEmbed {
+  /**
+   * Base URL of the embed proxy service. Override to self-host.
+   * @type {string}
+   */
+  static baseURL = baseURL;
+
   /**
    * @param {WebEmbed} [data={}] Raw data
    */
@@ -323,7 +329,7 @@ class WebEmbed {
   }
 
   toString() {
-    const url = new URL(baseURL);
+    const url = new URL(WebEmbed.baseURL);
     url.searchParams.set('image_type', this.imageType);
     if (this.title) {
       url.searchParams.set('title', this.title);

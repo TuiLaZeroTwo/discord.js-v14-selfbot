@@ -64,7 +64,7 @@ class GuildBoost extends Base {
    * @type {?Guild}
    * @readonly
    */
-  get guilld() {
+  get guild() {
     return this.client.guilds.cache.get(this.guildId);
   }
 

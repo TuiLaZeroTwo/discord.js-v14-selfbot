@@ -390,21 +390,43 @@ class Message extends Base {
        * @type {Collection<Snowflake, Message>}
        */
       this.messageSnapshots = data.message_snapshots.reduce((coll, snapshot) => {
-        const channel = this.client.channels.cache.get(this.reference.channelId);
+        const reference = this.reference;
+        if (!reference?.messageId) return coll;
+        const channel = this.client.channels.cache.get(reference.channelId);
         const snapshotData = {
           ...snapshot.message,
-          id: this.reference.messageId,
-          channel_id: this.reference.channelId,
-          guild_id: this.reference.guildId,
+          id: reference.messageId,
+          channel_id: reference.channelId ?? this.channelId,
+          guild_id: reference.guildId ?? this.guildId,
         };
 
         return coll.set(
-          this.reference.messageId,
+          snapshotData.id,
           channel ? channel.messages._add(snapshotData) : new this.constructor(this.client, snapshotData),
         );
       }, new Collection());
     } else {
       this.messageSnapshots ??= new Collection();
+    }
+
+    if ('role_subscription_data' in data) {
+      /**
+       * Data for a role subscription purchase or renewal notification.
+       * @type {?MessageRoleSubscriptionData}
+       */
+      this.roleSubscriptionData = data.role_subscription_data;
+    } else {
+      this.roleSubscriptionData ??= null;
+    }
+
+    if ('shared_client_theme' in data) {
+      /**
+       * The client theme shared by this message.
+       * @type {?MessageSharedClientTheme}
+       */
+      this.sharedClientTheme = data.shared_client_theme;
+    } else {
+      this.sharedClientTheme ??= null;
     }
 
     /**
@@ -1129,8 +1151,8 @@ class Message extends Base {
    * @returns {Promise<Message|Modal>}
    */
   selectMenu(menu, values = []) {
-    let selectMenu = menu;
-    if (/[0-4]/.test(menu)) {
+    let selectMenu;
+    if (typeof menu === 'number' || /^[0-4]$/.test(menu)) {
       selectMenu = this.components[menu]?.components[0];
     } else if (typeof menu == 'string') {
       selectMenu = this.components
@@ -1142,7 +1164,8 @@ class Message extends Base {
             !b.disabled,
         );
     }
-    if (values.length < selectMenu.minValues) {
+    if (!selectMenu) throw new Error('SELECT_MENU_NOT_FOUND');
+    if (values.length < (selectMenu.minValues ?? 0)) {
       throw new RangeError(`[SELECT_MENU_MIN_VALUES] The minimum number of values is ${selectMenu.minValues}`);
     }
     if (values.length > selectMenu?.maxValues) {

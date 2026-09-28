@@ -14,6 +14,8 @@
 		"node": true
 	},
 	"ignorePatterns": [
+		"based/**",
+		"**/*.test-d.ts",
 		"**/src/util/Voice.js",
 		"**/examples/**"
 	],
@@ -41,7 +43,7 @@
 				"singleQuote": true,
 				"quoteProps": "as-needed",
 				"trailingComma": "all",
-				"endOfLine": "lf",
+				"endOfLine": "auto",
 				"arrowParens": "avoid"
 			}
 		],

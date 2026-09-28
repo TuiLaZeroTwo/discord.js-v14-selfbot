@@ -240,7 +240,7 @@ class GuildBanManager extends CachedManager {
     if (userIds.length === 0) throw new Error('BULK_BAN_USERS_OPTION_EMPTY');
 
     const result = await this.client.api.guilds(this.guild.id)['bulk-ban'].post({
-      data: { delete_message_days: options.deleteMessageSeconds, user_ids: userIds },
+      data: { delete_message_seconds: options.deleteMessageSeconds, user_ids: userIds },
       reason: options.reason,
     });
     return { bannedUsers: result.banned_users, failedUsers: result.failed_users };

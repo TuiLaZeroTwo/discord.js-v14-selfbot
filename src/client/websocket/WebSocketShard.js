@@ -702,16 +702,18 @@ class WebSocketShard extends EventEmitter {
     this.status = Status.IDENTIFYING;
 
     // Patch something
-    Object.keys(client.options.ws.properties)
+    const properties = { ...client.options.ws.properties };
+    Object.keys(properties)
       .filter(k => k.startsWith('$'))
       .forEach(k => {
-        client.options.ws.properties[k.slice(1)] = client.options.ws.properties[k];
-        delete client.options.ws.properties[k];
+        properties[k.slice(1)] = properties[k];
+        delete properties[k];
       });
 
     // Clone the identify payload and assign the token and shard info
     const d = {
       ...client.options.ws,
+      properties,
       token: client.token,
     };
 

@@ -75,6 +75,14 @@ class DiscordAuthWebsocket extends EventEmitter {
   /**
    * @type {Date}
    */
+  get expire() {
+    return this.#expire;
+  }
+
+  /**
+   * @deprecated Use `expire`
+   * @type {Date}
+   */
   get exprire() {
     return this.#expire;
   }

@@ -20,6 +20,22 @@ const {
   userMention,
 } = require('@discordjs/builders');
 
+const timestampStyles = new Set(['t', 'T', 'd', 'D', 'f', 'F', 'R']);
+
+function resolveTimestamp(timestamp) {
+  if (timestamp instanceof Date) {
+    const milliseconds = timestamp.getTime();
+    if (!Number.isFinite(milliseconds)) throw new TypeError('Invalid timestamp');
+    return Math.floor(milliseconds / 1_000);
+  }
+
+  if (typeof timestamp !== 'number' || !Number.isFinite(timestamp)) {
+    throw new TypeError('Invalid timestamp');
+  }
+
+  return Math.abs(timestamp) >= 1e11 ? Math.floor(timestamp / 1_000) : Math.floor(timestamp);
+}
+
 /**
  * Contains various Discord-specific functions for formatting messages.
  */
@@ -185,6 +201,17 @@ Formatters.strikethrough = strikethrough;
  * @returns {string}
  */
 Formatters.time = time;
+
+/**
+ * Formats a Date or Unix timestamp into Discord message timestamp syntax.
+ * @param {Date|number} timestamp Date, Unix seconds, or Unix milliseconds.
+ * @param {TimestampStylesString} [style='f'] Discord timestamp style.
+ * @returns {string}
+ */
+Formatters.formatTimestamp = function formatTimestamp(timestamp, style = 'f') {
+  if (typeof style !== 'string' || !timestampStyles.has(style)) throw new TypeError('Invalid timestamp style');
+  return `<t:${resolveTimestamp(timestamp)}:${style}>`;
+};
 
 /**
  * A message formatting timestamp style, as defined in

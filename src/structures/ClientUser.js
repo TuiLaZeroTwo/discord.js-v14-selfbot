@@ -15,11 +15,15 @@ const Util = require('../util/Util');
  */
 class ClientUser extends User {
   #packageName = null;
-  #intervalSamsungPresence = setInterval(() => {
-    this.client.emit('debug', `[UPDATE] Samsung Presence: ${this.#packageName}`);
-    if (!this.#packageName) return;
-    this.setSamsungActivity(this.#packageName, 'UPDATE');
-  }, 1000 * 60 * 10).unref();
+  #intervalSamsungPresence = null;
+
+  #startSamsungKeepalive() {
+    this.#intervalSamsungPresence ??= setInterval(() => {
+      this.client.emit('debug', `[UPDATE] Samsung Presence: ${this.#packageName}`);
+      if (!this.#packageName) return;
+      this.setSamsungActivity(this.#packageName, 'UPDATE');
+    }, 1000 * 60 * 10).unref();
+  }
 
   _patch(data) {
     super._patch(data);
@@ -403,8 +407,12 @@ class ClientUser extends User {
         update: type,
       },
     });
-    if (type !== 'STOP') this.#packageName = packageName;
-    else this.#packageName = null;
+    if (type !== 'STOP') {
+      this.#packageName = packageName;
+      this.#startSamsungKeepalive();
+    } else {
+      this.#packageName = null;
+    }
     return this;
   }
 

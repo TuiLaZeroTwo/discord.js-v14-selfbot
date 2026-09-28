@@ -44,5 +44,6 @@
         // Completeness
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
-    }
+    },
+    "include": ["typings/**/*.d.ts"]
 }

@@ -124,7 +124,7 @@ class GroupDMChannel extends Channel {
 
   /**
    * Leave this Group DM Channel.
-   * @param {?boolean} slient Leave without notifying other members
+   * @param {?boolean} silent Leave without notifying other members
    * @returns {Promise<GroupDMChannel>}
    * @example
    * // Delete the channel
@@ -132,8 +132,8 @@ class GroupDMChannel extends Channel {
    *   .then(console.log)
    *   .catch(console.error);
    */
-  async delete(slient = false) {
-    if (typeof slient === 'boolean' && slient) {
+  async delete(silent = false) {
+    if (typeof silent === 'boolean' && silent) {
       await this.client.api.channels[this.id].delete({
         query: {
           silent: true,
@@ -290,9 +290,10 @@ class GroupDMChannel extends Channel {
   async removeInvite(invite) {
     // Resolve
     let code = invite?.code;
-    if (!code && URL.canParse(invite)) code = new URL(invite).pathname.slice(1);
-    else code = invite;
-    await this.client.api.channels(this.id).invites[invite].delete();
+    if (!code && typeof invite === 'string' && URL.canParse(invite)) code = new URL(invite).pathname.slice(1);
+    else if (!code) code = invite;
+    if (!code || typeof code !== 'string') throw new Error('INVALID_INVITE');
+    await this.client.api.channels(this.id).invites[code].delete();
     return this;
   }
 

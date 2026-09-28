@@ -8,8 +8,9 @@ const { Error, RangeError, TypeError } = require('../errors');
  */
 exports.MaxBulkDeletableMessageAge = 1_209_600_000;
 
+// Ponytail: fallback UA for RemoteAuth (pre-client); keep in sync with FINGERPRINTS[0] in Options.js
 exports.UserAgent =
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9210 Chrome/134.0.6998.205 Electron/35.3.0 Safari/537.36';
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9256 Chrome/148.0.7778.280 Electron/42.7.1 Safari/537.36';
 
 /**
  * Chrome TLS ciphers
@@ -261,7 +262,8 @@ exports.Opcodes = {
   SEARCH_RECENT_MEMBERS: 35, // Payload: { guild_id: string, query: string, continuation_token?: Snowflake }
   REQUEST_CHANNEL_STATUSES: 36, // Payload: { guild_id: string } | Response: CHANNEL_STATUSES | { guild_id, channels: { status, id }[] }
   GUILD_SUBSCRIPTIONS_BULK: 37, // Payload: { subscriptions: Object<guild_id, { Payload_op14 - guild_id }> } | Response: Opcode 14
-  // Updated: 23/1/2024
+  REQUEST_CHANNEL_INFO: 43, // Payload: { channel_ids: Snowflake[], guild_id?: Snowflake } | Response: CHANNEL_INFO
+  // Updated: 4/9/2026
 };
 
 /**

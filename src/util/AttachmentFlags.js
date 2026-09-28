@@ -23,6 +23,7 @@ class AttachmentFlags extends BitField {}
  * @see {@link https://discord.com/developers/docs/resources/channel#attachment-object-attachment-structure-attachment-flags}
  */
 AttachmentFlags.FLAGS = {
+  SPOILER: 1 << 0,
   IS_REMIX: 1 << 2,
 };
 

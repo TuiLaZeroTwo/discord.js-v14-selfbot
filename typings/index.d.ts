@@ -34,9 +34,9 @@ import {
   APIInteractionDataResolvedGuildMember,
   APIInteractionGuildMember,
   APIMessage,
-  APIMessageActionRowComponent,
+  APIComponentInMessageActionRow,
   APIMessageComponent,
-  APIModalActionRowComponent,
+  APIComponentInModalActionRow,
   APIOverwrite,
   APIPartialChannel,
   APIPartialEmoji,
@@ -236,7 +236,7 @@ export class DiscordAuthWebsocket extends EventEmitter {
     discriminator: number;
     avatar: string;
   };
-  public readonly exprire: Date;
+  public readonly expire: Date;
   public readonly AuthURL: string;
   public connect(client?: Client): Promise<void>;
   public destroy(): void;
@@ -2009,7 +2009,6 @@ export class Integration extends Base {
 
 export class IntegrationApplication extends Application {
   private constructor(client: Client, data: RawIntegrationApplicationData);
-  public bot: User | null;
   public termsOfServiceURL: string | null;
   public privacyPolicyURL: string | null;
   public rpcOrigins: string[];
@@ -2276,6 +2275,8 @@ export class Message<Cached extends boolean = boolean> extends Base {
   public readonly url: string;
   public webhookId: Snowflake | null;
   public poll: Poll | null;
+  public roleSubscriptionData: MessageRoleSubscriptionData | null;
+  public sharedClientTheme: MessageSharedClientTheme | null;
   public call: MessageCall | null;
   public flags: Readonly<MessageFlags>;
   public reference: MessageReference | null;
@@ -2327,8 +2328,8 @@ export class MessageActionRow<
   T extends MessageActionRowComponent | ModalActionRowComponent = MessageActionRowComponent,
   U = T extends ModalActionRowComponent ? ModalActionRowComponentResolvable : MessageActionRowComponentResolvable,
   V = T extends ModalActionRowComponent
-    ? APIActionRowComponent<APIModalActionRowComponent>
-    : APIActionRowComponent<APIMessageActionRowComponent>,
+    ? APIActionRowComponent<APIComponentInModalActionRow>
+    : APIActionRowComponent<APIComponentInMessageActionRow>,
 > extends BaseMessageComponent {
   // tslint:disable-next-line:ban-ts-ignore
   // @ts-ignore (TS:2344, Caused by TypeScript 4.8)
@@ -2355,8 +2356,11 @@ export class MessageAttachment {
   public id: Snowflake;
   public name: string | null;
   public proxyURL: string;
+  public placeholder: string | null;
+  public placeholderVersion: number | null;
   public size: number;
   public readonly spoiler: boolean;
+  public readonly isSpoiler: boolean;
   public title: string | null;
   public url: string;
   public waveform: string | null;
@@ -2373,7 +2377,7 @@ export class AttachmentFlags extends BitField<AttachmentFlagsString> {
   public static resolve(bit?: BitFieldResolvable<AttachmentFlagsString, number>): number;
 }
 
-export type AttachmentFlagsString = 'IS_REMIX';
+export type AttachmentFlagsString = 'SPOILER' | 'IS_REMIX';
 
 export class MessageButton extends BaseMessageComponent {
   public constructor(data?: MessageButton | MessageButtonOptions | APIButtonComponent);
@@ -2486,9 +2490,9 @@ export class MessageComponentInteraction<Cached extends CacheType = CacheType> e
   public readonly component: CacheTypeReducer<
     Cached,
     MessageActionRowComponent,
-    Exclude<APIMessageComponent, APIActionRowComponent<APIMessageActionRowComponent>>,
-    MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent<APIMessageActionRowComponent>>,
-    MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent<APIMessageActionRowComponent>>
+    Exclude<APIMessageComponent, APIActionRowComponent<APIComponentInMessageActionRow>>,
+    MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent<APIComponentInMessageActionRow>>,
+    MessageActionRowComponent | Exclude<APIMessageComponent, APIActionRowComponent<APIComponentInMessageActionRow>>
   >;
   public componentType: Exclude<MessageComponentType, 'ACTION_ROW'>;
   public customId: string;
@@ -2855,6 +2859,20 @@ export interface MessageCall {
   participants: readonly Snowflake[];
 }
 
+export interface MessageRoleSubscriptionData {
+  role_subscription_listing_id: Snowflake;
+  tier_name: string;
+  total_months_subscribed: number;
+  is_renewal: boolean;
+}
+
+export interface MessageSharedClientTheme {
+  colors: string[];
+  gradient_angle: number;
+  base_mix: number;
+  base_theme?: number | null;
+}
+
 export class ModalSubmitFieldsResolver {
   constructor(components: PartialModalActionRow[]);
   private readonly _fields: PartialTextInputData[];
@@ -2931,7 +2949,7 @@ export class GroupDMChannel extends TextBasedChannelMixin(Channel, [
   public readonly recipients: Collection<Snowflake, User>;
   public readonly owner: User;
   public iconURL(options?: StaticImageURLOptions): string | null;
-  public leave(slient?: boolean): Promise<this>;
+  public leave(silent?: boolean): Promise<this>;
   public edit(data: GroupDMChannelEditData): Promise<this>;
   public setIcon(icon: BufferResolvable | Base64Resolvable | null): Promise<this>;
   public setName(name: string): Promise<this>;
@@ -3772,7 +3790,7 @@ export class User extends PartialTextBasedChannel(Base) {
   public readonly friendNickname: string | null | undefined;
   public primaryGuild: UserPrimaryGuild | null;
   /** @deprecated Use {@link User.primaryGuild} instead */
-  public clan: PrimaryGuild | null;
+  public clan: UserPrimaryGuild | null;
   public avatarURL(options?: ImageURLOptions): string | null;
   public avatarDecorationURL(): string | null;
   public bannerURL(options?: ImageURLOptions): string | null;
@@ -3886,11 +3904,14 @@ export class Formatters extends null {
   public static spoiler: typeof spoiler;
   public static strikethrough: typeof strikethrough;
   public static time: typeof time;
+  public static formatTimestamp(timestamp: Date | number, style?: TimestampStylesString): string;
   public static TimestampStyles: typeof TimestampStyles;
   public static TimestampStylesString: TimestampStylesString;
   public static underscore: typeof underscore;
   public static userMention: typeof userMention;
 }
+
+export function formatTimestamp(timestamp: Date | number, style?: TimestampStylesString): string;
 
 export class VoiceChannel extends BaseGuildVoiceChannel {
   /** @deprecated Use manageable instead */
@@ -7216,7 +7237,7 @@ export type MessageActionRowComponentOptions =
 export type MessageActionRowComponentResolvable =
   | MessageActionRowComponent
   | MessageActionRowComponentOptions
-  | APIMessageActionRowComponent;
+  | APIComponentInMessageActionRow;
 
 export type ModalActionRowComponent = TextInputComponent;
 
@@ -7225,7 +7246,7 @@ export type ModalActionRowComponentOptions = TextInputComponentOptions;
 export type ModalActionRowComponentResolvable =
   | ModalActionRowComponent
   | ModalActionRowComponentOptions
-  | APIModalActionRowComponent;
+  | APIComponentInModalActionRow;
 
 export interface MessageActionRowOptions<
   T extends
@@ -7631,7 +7652,9 @@ export type PermissionString =
   | 'USE_CLYDE_AI'
   | 'SET_VOICE_CHANNEL_STATUS'
   | 'SEND_POLLS'
-  | 'USE_EXTERNAL_APPS';
+  | 'USE_EXTERNAL_APPS'
+  | 'PIN_MESSAGES'
+  | 'BYPASS_SLOWMODE';
 
 export type RecursiveArray<T> = ReadonlyArray<T | RecursiveArray<T>>;
 

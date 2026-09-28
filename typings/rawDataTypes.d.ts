@@ -25,6 +25,8 @@ import {
   APIInvite,
   APIInviteStageInstance,
   APIMessage,
+  APIMessageRoleSubscriptionData,
+  APIMessageSharedClientTheme,
   APIMessageButtonInteractionData,
   APIMessageComponentInteraction,
   APIMessageSelectMenuInteractionData,
@@ -88,7 +90,7 @@ import {
   GuildFeature,
   LocalizationMap,
   APIActionRowComponent,
-  APIActionRowComponentTypes,
+  APIComponentInMessageActionRow,
 } from 'discord-api-types/v10';
 import { GuildChannel, Guild, PermissionOverwrites } from '.';
 import type {
@@ -190,7 +192,13 @@ export interface RawMessageAttachmentData {
   ephemeral?: boolean;
   duration_secs?: number;
   waveform?: string;
+  flags?: number;
+  placeholder?: string;
+  placeholder_version?: number;
 }
+
+export type RawMessageRoleSubscriptionData = APIMessageRoleSubscriptionData;
+export type RawMessageSharedClientTheme = APIMessageSharedClientTheme;
 
 export type RawMessagePayloadData =
   | RESTPostAPIChannelMessageJSONBody
@@ -390,7 +398,7 @@ export interface APISectionComponent extends APIBaseComponent<MessageComponentTy
 }
 
 export type APIContainerComponents =
-  | APIActionRowComponent<APIActionRowComponentTypes>
+  | APIActionRowComponent<APIComponentInMessageActionRow>
   | APITextDisplayComponent
   | APISectionComponent
   | APIMediaGalleryComponent

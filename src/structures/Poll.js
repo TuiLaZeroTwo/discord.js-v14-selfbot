@@ -75,7 +75,7 @@ class Poll extends Base {
        */
       this.resultsFinalized = data.results.is_finalized;
 
-      for (const answerResult of data.results.answer_counts) {
+      for (const answerResult of data.results.answer_counts ?? []) {
         const answer = this.answers.get(answerResult.id);
         answer?._patch(answerResult);
       }

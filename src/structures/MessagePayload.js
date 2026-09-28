@@ -126,13 +126,15 @@ class MessagePayload {
    */
   resolveData() {
     if (this.data) return this;
+    validateMessageLimits(this.options);
     const isInteraction = this.isInteraction;
     const isWebhook = this.isWebhook;
 
     const content = this.makeContent();
     const tts = Boolean(this.options.tts);
 
-    let nonce = SnowflakeUtil.generate();
+    let nonce = this.nonce ?? SnowflakeUtil.generate();
+    this.nonce = nonce;
     if (typeof this.options.nonce !== 'undefined') {
       nonce = this.options.nonce;
       // eslint-disable-next-line max-len
@@ -142,6 +144,12 @@ class MessagePayload {
     }
 
     const components = this.options.components?.map(c => BaseMessageComponent.create(c).toJSON());
+    const hasComponentsV2 = components?.some(component => containsComponentsV2(component));
+    if (hasComponentsV2) {
+      if (content !== undefined || this.options.embeds?.length || this.options.stickers?.length || this.options.poll) {
+        throw new DjsError('INVALID_MESSAGE_COMPONENTS_V2');
+      }
+    }
 
     let username;
     let avatarURL;
@@ -157,6 +165,10 @@ class MessagePayload {
     let flags;
     if (this.options.flags != null) {
       flags = new MessageFlags(this.options.flags).bitfield;
+    }
+
+    if (hasComponentsV2) {
+      flags = new MessageFlags(flags ?? 0).add(MessageFlags.FLAGS.IS_COMPONENTS_V2).bitfield;
     }
 
     if (isInteraction && this.options.ephemeral) {
@@ -341,6 +353,19 @@ class MessagePayload {
 }
 
 module.exports = MessagePayload;
+
+function validateMessageLimits(options) {
+  if (options.embeds?.length > 10) throw new RangeError('MESSAGE_EMBEDS_LIMIT');
+  if (options.files?.length > 10) throw new RangeError('MESSAGE_FILES_LIMIT');
+}
+
+function containsComponentsV2(component) {
+  if (component?.type === 17 || component?.type === 'CONTAINER') return true;
+  return Boolean(
+    component?.components?.some(containsComponentsV2) ||
+      (component?.accessory && containsComponentsV2(component.accessory)),
+  );
+}
 
 /**
  * A target for a message.

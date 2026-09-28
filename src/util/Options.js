@@ -1,8 +1,53 @@
 'use strict';
 
 const { randomUUID } = require('node:crypto');
-const { UserAgent } = require('./Constants');
 const Intents = require('./Intents');
+
+/**
+ * Verified recent Discord desktop client fingerprint.
+ * @typedef {Object} ClientFingerprint
+ * @property {string} version Client version
+ * @property {number} build Client build number
+ * @property {number} native Native build number
+ * @property {string} electron Electron version
+ * @property {string} chrome Chrome version
+ * @property {string} os_version OS version
+ */
+
+/**
+ * Verified recent Discord desktop client fingerprints.
+ * One is picked per Client instance and kept consistent across REST + WS + super-properties.
+ * Sources: updates.discord.com manifests, Discord-Datamining, quest-helper super_properties (Aug 2026).
+ * Update this list when Discord ships a new stable build.
+ * @type {ClientFingerprint[]}
+ */
+const FINGERPRINTS = [
+  {
+    version: '1.0.9256',
+    build: 606747,
+    native: 89799,
+    electron: '42.7.1',
+    chrome: '148.0.7778.280',
+    os_version: '10.0.19045',
+  },
+  {
+    version: '1.0.9255',
+    build: 602393,
+    native: 89332,
+    electron: '42.7.1',
+    chrome: '148.0.7778.280',
+    os_version: '10.0.19045',
+  },
+];
+
+/**
+ * Build a User-Agent string from a fingerprint.
+ * @param {ClientFingerprint} fingerprint Verified client fingerprint
+ * @returns {string}
+ */
+function buildUserAgent({ version, electron, chrome }) {
+  return `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) discord/${version} Chrome/${chrome} Electron/${electron} Safari/537.36`;
+}
 
 /**
  * Rate limit data
@@ -161,6 +206,9 @@ class Options extends null {
    * @returns {ClientOptions}
    */
   static createDefault() {
+    // Ponytail: pick once per Client so all requests share one fingerprint; add per-account override option when needed
+    const fingerprint = FINGERPRINTS[Math.floor(Math.random() * FINGERPRINTS.length)];
+    const UserAgent = buildUserAgent(fingerprint);
     return {
       DMChannelVoiceStatusSync: 0,
       captchaRetryLimit: 3,
@@ -196,18 +244,18 @@ class Options extends null {
           os: 'Windows',
           browser: 'Discord Client',
           release_channel: 'stable',
-          client_version: '1.0.9210',
-          os_version: '10.0.19044',
+          client_version: fingerprint.version,
+          os_version: fingerprint.os_version,
           os_arch: 'x64',
           app_arch: 'x64',
           system_locale: 'en-US',
           has_client_mods: false,
           client_launch_id: randomUUID(),
           browser_user_agent: UserAgent,
-          browser_version: '35.3.0',
-          os_sdk_version: '19044',
-          client_build_number: 455964,
-          native_build_number: 69976,
+          browser_version: fingerprint.electron,
+          os_sdk_version: fingerprint.os_version.split('.').pop(),
+          client_build_number: fingerprint.build,
+          native_build_number: fingerprint.native,
           client_event_source: null,
           launch_signature: randomUUID(),
           client_heartbeat_session_id: randomUUID(),

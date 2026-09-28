@@ -192,6 +192,26 @@ class MessageAttachment {
     } else {
       this.title ??= null;
     }
+
+    if ('placeholder' in data) {
+      /**
+       * The ThumbHash placeholder for this attachment.
+       * @type {?string}
+       */
+      this.placeholder = data.placeholder;
+    } else {
+      this.placeholder ??= null;
+    }
+
+    if ('placeholder_version' in data) {
+      /**
+       * The version of the ThumbHash placeholder.
+       * @type {?number}
+       */
+      this.placeholderVersion = data.placeholder_version;
+    } else {
+      this.placeholderVersion ??= null;
+    }
   }
 
   /**
@@ -200,7 +220,14 @@ class MessageAttachment {
    * @readonly
    */
   get spoiler() {
-    return Util.basename(this.url ?? this.name).startsWith('SPOILER_');
+    return Boolean(
+      this.flags?.has(AttachmentFlags.FLAGS.SPOILER) ||
+        (this.url ?? this.name)?.split('/').pop()?.startsWith('SPOILER_'),
+    );
+  }
+
+  get isSpoiler() {
+    return this.spoiler;
   }
 
   toJSON() {

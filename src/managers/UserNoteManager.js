@@ -24,7 +24,7 @@ class UserNoteManager extends BaseManager {
 
   async updateNote(id, note = null) {
     await this.client.api.users['@me'].notes(id).put({ data: { note } });
-    if (!note) this.cache.delete(id, note);
+    if (!note) this.cache.delete(id);
     else this.cache.set(id, note);
     return this;
   }

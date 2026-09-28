@@ -132,17 +132,11 @@ class WebSocketManager extends EventEmitter {
       .then(r => (gatewayURL = r.url))
       .catch(() => {});
 
-    const total = Infinity;
-    const remaining = Infinity;
     const recommendedShards = 1;
 
     this.debug(`Fetched Gateway Information
     URL: ${gatewayURL}
     Recommended Shards: ${recommendedShards}`);
-
-    this.debug(`Session Limit Information
-    Total: ${total}
-    Remaining: ${remaining}`);
 
     this.gateway = `${gatewayURL}/`;
 
