@@ -13,6 +13,7 @@ let deprecationEmittedForComparePositions = false;
  * @type {WeakSet<Role>}
  * @private
  * @internal
+ * @ignore
  */
 const deletedRoles = new WeakSet();
 let deprecationEmittedForDeleted = false;

@@ -13,6 +13,7 @@ const Permissions = require('../util/Permissions');
  * @type {WeakSet<GuildMember>}
  * @private
  * @internal
+ * @ignore
  */
 const deletedGuildMembers = new WeakSet();
 let deprecationEmittedForDeleted = false;

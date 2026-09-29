@@ -204,11 +204,12 @@ class PacketHandler extends EventEmitter {
   }
 
   /**
-   * Test
+   * Handles a video RTP packet for a user stream.
    * @param {number} ssrc ssrc
    * @param {Object} userStat { userId, hasVideo }
    * @param {RtpPacket} packet RtpPacket
    * @returns {void}
+   * @ignore
    */
   videoReceiver(ssrc, userStat, packet) {
     const streamInfo = this.videoStreams.get(userStat.userId);

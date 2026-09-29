@@ -10,6 +10,7 @@ const SnowflakeUtil = require('../util/SnowflakeUtil');
  * @type {WeakSet<StageInstance>}
  * @private
  * @internal
+ * @ignore
  */
 const deletedStickers = new WeakSet();
 let deprecationEmittedForDeleted = false;

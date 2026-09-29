@@ -234,6 +234,7 @@ class Collector extends EventEmitter {
   /**
    * Allows collectors to be consumed with for-await-of loops
    * @see {@link https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/for-await...of}
+   * @ignore
    */
   async *[Symbol.asyncIterator]() {
     const queue = [];

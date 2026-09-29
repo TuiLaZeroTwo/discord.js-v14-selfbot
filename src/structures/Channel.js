@@ -21,6 +21,7 @@ const SnowflakeUtil = require('../util/SnowflakeUtil');
  * @type {WeakSet<Channel>}
  * @private
  * @internal
+ * @ignore
  */
 const deletedChannels = new WeakSet();
 let deprecationEmittedForDeleted = false;

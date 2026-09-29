@@ -249,12 +249,10 @@ class BaseDispatcher extends Writable {
    * @returns {Buffer} <Buffer be de 00 01>
    */
   createHeaderExtension() {
-    /**
-      *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      |      defined by profile       |           length              |
-      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      */
+    // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+    // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    // |      defined by profile       |           length              |
+    // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
     const profile = Buffer.alloc(4);
     profile[0] = 0xbe;
     profile[1] = 0xde;
@@ -273,30 +271,24 @@ class BaseDispatcher extends Writable {
   createPayloadExtension() {
     const extensionsData = [];
     for (let ext of extensions) {
-      /**
-       * EXTENSION DATA - each extension payload is 32 bits
-       */
+      // EXTENSION DATA - each extension payload is 32 bits
       const data = Buffer.alloc(4);
 
       // https://webrtc.googlesource.com/src/+/refs/heads/main/docs/native-code/rtp-hdrext/playout-delay
       if (ext.id === 5) {
-        /**
-         *  0 1 2 3 4 5 6 7
-          +-+-+-+-+-+-+-+-+
-          |  ID   |  len  |
-          +-+-+-+-+-+-+-+-+
-
-          where len = actual length - 1
-        /
+        // 0 1 2 3 4 5 6 7
+        // +-+-+-+-+-+-+-+-+
+        // |  ID   |  len  |
+        // +-+-+-+-+-+-+-+-+
+        // where len = actual length - 1
         data[0] = (ext.id & 0b00001111) << 4;
         data[0] |= (ext.len - 1) & 0b00001111;
 
-        /**  Specific to type playout-delay
-          *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4
-            +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-            |       MIN delay       |       MAX delay       |
-            +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-        */
+        // Specific to type playout-delay
+        // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4
+        // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+        // |       MIN delay       |       MAX delay       |
+        // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
         data.writeUIntBE(ext.value, 1, 2); // Not quite but its 0 anyway
       }
       extensionsData.push(data);

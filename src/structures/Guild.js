@@ -45,6 +45,7 @@ let deprecationEmittedForMe = false;
  * @type {WeakSet<Guild>}
  * @private
  * @internal
+ * @ignore
  */
 const deletedGuilds = new WeakSet();
 

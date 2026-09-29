@@ -19,6 +19,7 @@ const Intents = require('./Intents');
  * One is picked per Client instance and kept consistent across REST + WS + super-properties.
  * Sources: updates.discord.com manifests, Discord-Datamining, quest-helper super_properties (Aug 2026).
  * Update this list when Discord ships a new stable build.
+ * @ignore
  * @type {ClientFingerprint[]}
  */
 const FINGERPRINTS = [

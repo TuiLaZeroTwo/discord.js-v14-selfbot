@@ -30,6 +30,7 @@ const Util = require('../util/Util');
  * @type {WeakSet<Message>}
  * @private
  * @internal
+ * @ignore
  */
 const deletedMessages = new WeakSet();
 let deprecationEmittedForDeleted = false;

@@ -8,6 +8,7 @@ const SnowflakeUtil = require('../util/SnowflakeUtil');
  * @type {WeakSet<Emoji>}
  * @private
  * @internal
+ * @ignore
  */
 const deletedEmojis = new WeakSet();
 let deprecationEmittedForDeleted = false;
