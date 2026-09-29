@@ -5,6 +5,7 @@ import {
   MessageManager,
   Message,
   AuthorizingIntegrationOwners,
+  BaseChannel,
   MessagePayload,
   Options,
   RoleManager,
@@ -28,8 +29,16 @@ declare const integrationOwners: AuthorizingIntegrationOwners;
 
 client.guilds satisfies GuildManager;
 clientWithV14Intents.guilds satisfies GuildManager;
+declare const baseChannel: BaseChannel;
+baseChannel.isTextBased();
 client.options = options;
 client.guilds.fetch('123456789012345678');
+client.channels.cache.forEach(channel => {
+  channel.isTextBased();
+  channel.isDMBased();
+  channel.isVoiceBased();
+  channel.isSendable();
+});
 message.roleSubscriptionData!.tierName satisfies string;
 message.sharedClientTheme!.gradientAngle satisfies number;
 message.interactionMetadata!.authorizingIntegrationOwners satisfies AuthorizingIntegrationOwners;

@@ -835,6 +835,10 @@ export abstract class Channel extends Base {
   public fetch(force?: boolean): Promise<this>;
   public isText(): this is TextBasedChannel;
   public isVoice(): this is BaseGuildVoiceChannel;
+  public isTextBased(): this is TextBasedChannel;
+  public isDMBased(): this is DMChannel | GroupDMChannel;
+  public isVoiceBased(): this is BaseGuildVoiceChannel;
+  public isSendable(): boolean;
   public isThread(): this is ThreadChannel;
   public isDirectory(): this is DirectoryChannel;
   public isThreadOnly(): this is ThreadOnlyChannel;
@@ -8213,6 +8217,8 @@ export interface WelcomeChannelData {
   channel: TextChannel | NewsChannel | StoreChannel | ForumChannel | MediaChannel | Snowflake;
   emoji?: EmojiIdentifierResolvable;
 }
+
+export { Channel as BaseChannel };
 
 export interface WelcomeScreenEditData {
   enabled?: boolean;

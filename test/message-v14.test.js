@@ -2,8 +2,9 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { AuthorizingIntegrationOwners } = require('../src');
+const { AuthorizingIntegrationOwners, BaseChannel } = require('../src');
 const Client = require('../src/client/Client');
+const { Channel } = require('../src/structures/Channel');
 const { Message } = require('../src/structures/Message');
 
 test('message v14 role-subscription and shared-theme fields are camel-cased', () => {
@@ -59,4 +60,15 @@ test('message v14 role-subscription and shared-theme fields are camel-cased', ()
   assert.equal(message.interactionMetadata.triggeringInteractionMetadata.id, '423456789012345679');
   assert.ok(message.interactionMetadata.authorizingIntegrationOwners instanceof AuthorizingIntegrationOwners);
   client.destroy();
+});
+
+test('channel exposes v14 capability helpers', () => {
+  assert.equal(BaseChannel, Channel);
+  assert.equal(Channel.prototype.isTextBased.call({ messages: {} }), true);
+  assert.equal(Channel.prototype.isTextBased.call({}), false);
+  assert.equal(Channel.prototype.isDMBased.call({ type: 'DM' }), true);
+  assert.equal(Channel.prototype.isDMBased.call({ type: 'GROUP_DM' }), true);
+  assert.equal(Channel.prototype.isDMBased.call({ type: 'GUILD_TEXT' }), false);
+  assert.equal(Channel.prototype.isVoiceBased.call({ bitrate: 64_000 }), true);
+  assert.equal(Channel.prototype.isSendable.call({ send() {} }), true);
 });

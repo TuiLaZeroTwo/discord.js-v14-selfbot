@@ -90,6 +90,7 @@ exports.BaseGuildTextChannel = require('./structures/BaseGuildTextChannel');
 exports.BaseGuildVoiceChannel = require('./structures/BaseGuildVoiceChannel');
 exports.CategoryChannel = require('./structures/CategoryChannel');
 exports.Channel = require('./structures/Channel').Channel;
+exports.BaseChannel = exports.Channel;
 exports.ClientPresence = require('./structures/ClientPresence');
 exports.ClientUser = require('./structures/ClientUser');
 exports.Collector = require('./structures/interfaces/Collector');

@@ -274,6 +274,38 @@ class Channel extends Base {
   toJSON(...props) {
     return super.toJSON({ createdTimestamp: true }, ...props);
   }
+
+  /**
+   * Indicates whether this channel is text-based.
+   * @returns {boolean}
+   */
+  isTextBased() {
+    return 'messages' in this;
+  }
+
+  /**
+   * Indicates whether this is a DM or group DM channel.
+   * @returns {boolean}
+   */
+  isDMBased() {
+    return [ChannelTypes[ChannelTypes.DM], ChannelTypes[ChannelTypes.GROUP_DM]].includes(this.type);
+  }
+
+  /**
+   * Indicates whether this channel is voice-based.
+   * @returns {boolean}
+   */
+  isVoiceBased() {
+    return 'bitrate' in this;
+  }
+
+  /**
+   * Indicates whether this channel supports sending messages.
+   * @returns {boolean}
+   */
+  isSendable() {
+    return 'send' in this;
+  }
 }
 
 exports.Channel = Channel;
