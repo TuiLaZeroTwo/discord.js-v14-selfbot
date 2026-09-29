@@ -68,12 +68,12 @@
     "ws": "^8.16.0"
   },
   "engines": {
-    "node": ">=20.18"
+    "node": ">=24.17.0"
   },
   "devDependencies": {
     "@discordjs/docgen": "^0.12.1",
     "@types/debug": "^4.1.12",
-    "@types/node": "^22.10.7",
+    "@types/node": "^24.13.3",
     "@types/ws": "^8.5.10",
     "dtslint": "^4.2.1",
     "eslint": "^8.39.0",
