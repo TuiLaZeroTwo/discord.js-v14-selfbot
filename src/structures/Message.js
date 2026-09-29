@@ -21,6 +21,7 @@ const {
   SystemMessageTypes,
   MessageComponentTypes,
   MessageReferenceTypes,
+  MaxBulkDeletableMessageAge,
 } = require('../util/Constants');
 const MessageFlags = require('../util/MessageFlags');
 const Permissions = require('../util/Permissions');
@@ -706,7 +707,12 @@ class Message extends Base {
    * channel.bulkDelete(messages.filter(message => message.bulkDeletable));
    */
   get bulkDeletable() {
-    return false;
+    return Boolean(
+      this.guild &&
+        Date.now() - this.createdTimestamp < MaxBulkDeletableMessageAge &&
+        this.deletable &&
+        this.channel?.permissionsFor(this.client.user)?.has(Permissions.FLAGS.MANAGE_MESSAGES, false),
+    );
   }
 
   /**

@@ -6,6 +6,7 @@ const { AuthorizingIntegrationOwners, BaseChannel } = require('../src');
 const Client = require('../src/client/Client');
 const { Channel } = require('../src/structures/Channel');
 const { Message } = require('../src/structures/Message');
+const { MaxBulkDeletableMessageAge } = require('../src/util/Constants');
 
 test('message v14 role-subscription and shared-theme fields are camel-cased', () => {
   const client = new Client({ intents: 0 });
@@ -71,4 +72,24 @@ test('channel exposes v14 capability helpers', () => {
   assert.equal(Channel.prototype.isDMBased.call({ type: 'GUILD_TEXT' }), false);
   assert.equal(Channel.prototype.isVoiceBased.call({ bitrate: 64_000 }), true);
   assert.equal(Channel.prototype.isSendable.call({ send() {} }), true);
+});
+
+test('bulkDeletable enforces v14 age, guild, deletable, and permission checks', () => {
+  const bulkDeletable = Object.getOwnPropertyDescriptor(Message.prototype, 'bulkDeletable').get;
+  const message = {
+    guild: {},
+    createdTimestamp: Date.now(),
+    deletable: true,
+    channel: { permissionsFor: () => ({ has: () => true }) },
+    client: { user: {} },
+  };
+
+  assert.equal(bulkDeletable.call(message), true);
+  assert.equal(
+    bulkDeletable.call({ ...message, createdTimestamp: Date.now() - MaxBulkDeletableMessageAge - 1 }),
+    false,
+  );
+  assert.equal(bulkDeletable.call({ ...message, deletable: false }), false);
+  assert.equal(bulkDeletable.call({ ...message, guild: null }), false);
+  assert.equal(bulkDeletable.call({ ...message, channel: { permissionsFor: () => ({ has: () => false }) } }), false);
 });
