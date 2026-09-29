@@ -415,7 +415,12 @@ class Message extends Base {
        * Data for a role subscription purchase or renewal notification.
        * @type {?MessageRoleSubscriptionData}
        */
-      this.roleSubscriptionData = data.role_subscription_data;
+      this.roleSubscriptionData = {
+        roleSubscriptionListingId: data.role_subscription_data.role_subscription_listing_id,
+        tierName: data.role_subscription_data.tier_name,
+        totalMonthsSubscribed: data.role_subscription_data.total_months_subscribed,
+        isRenewal: data.role_subscription_data.is_renewal,
+      };
     } else {
       this.roleSubscriptionData ??= null;
     }
@@ -425,7 +430,14 @@ class Message extends Base {
        * The client theme shared by this message.
        * @type {?MessageSharedClientTheme}
        */
-      this.sharedClientTheme = data.shared_client_theme;
+      this.sharedClientTheme = {
+        colors: data.shared_client_theme.colors,
+        gradientAngle: data.shared_client_theme.gradient_angle,
+        baseMix: data.shared_client_theme.base_mix,
+      };
+      if ('base_theme' in data.shared_client_theme) {
+        this.sharedClientTheme.baseTheme = data.shared_client_theme.base_theme;
+      }
     } else {
       this.sharedClientTheme ??= null;
     }

@@ -2860,17 +2860,17 @@ export interface MessageCall {
 }
 
 export interface MessageRoleSubscriptionData {
-  role_subscription_listing_id: Snowflake;
-  tier_name: string;
-  total_months_subscribed: number;
-  is_renewal: boolean;
+  roleSubscriptionListingId: Snowflake;
+  tierName: string;
+  totalMonthsSubscribed: number;
+  isRenewal: boolean;
 }
 
 export interface MessageSharedClientTheme {
   colors: string[];
-  gradient_angle: number;
-  base_mix: number;
-  base_theme?: number | null;
+  gradientAngle: number;
+  baseMix: number;
+  baseTheme?: number | null;
 }
 
 export class ModalSubmitFieldsResolver {
