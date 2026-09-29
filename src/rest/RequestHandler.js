@@ -65,6 +65,7 @@ class RequestHandler {
     this.reset = -1;
     this.remaining = -1;
     this.limit = -1;
+    this.scope = 'user';
     this.sublimitedQueue = null;
   }
 
@@ -184,6 +185,7 @@ class RequestHandler {
           path: request.path,
           route: request.route,
           global: isGlobal,
+          scope: isGlobal ? 'global' : this.scope,
         });
       }
 
@@ -199,7 +201,7 @@ class RequestHandler {
       }
 
       // Determine whether a RateLimitError should be thrown
-      await this.onRateLimit(request, limit, timeout, isGlobal); // eslint-disable-line no-await-in-loop
+      await this.onRateLimit(request, limit, timeout, isGlobal, isGlobal ? 'global' : this.scope); // eslint-disable-line no-await-in-loop
 
       // Wait for the timeout to expire in order to avoid an actual 429
       await delayPromise; // eslint-disable-line no-await-in-loop
@@ -285,6 +287,7 @@ class RequestHandler {
       const reset = res.headers.get('x-ratelimit-reset');
       const resetAfter = res.headers.get('x-ratelimit-reset-after');
       const bucketHash = res.headers.get('x-ratelimit-bucket');
+      this.scope = res.headers.get('x-ratelimit-scope') || this.scope;
       if (bucketHash) this.manager.setBucketHash(request, bucketHash);
       this.limit = limit ? Number(limit) : Infinity;
       this.remaining = remaining ? Number(remaining) : 1;
