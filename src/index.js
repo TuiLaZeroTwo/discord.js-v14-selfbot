@@ -98,6 +98,7 @@ exports.ApplicationRoleConnectionMetadata =
   require('./structures/ApplicationRoleConnectionMetadata').ApplicationRoleConnectionMetadata;
 exports.AutoModerationActionExecution = require('./structures/AutoModerationActionExecution');
 exports.AutoModerationRule = require('./structures/AutoModerationRule');
+exports.Attachment = require('./structures/Attachment');
 exports.Base = require('./structures/Base');
 exports.BaseGuild = require('./structures/BaseGuild');
 exports.BaseGuildEmoji = require('./structures/BaseGuildEmoji');

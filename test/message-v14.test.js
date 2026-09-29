@@ -2,7 +2,7 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { AuthorizingIntegrationOwners, BaseChannel } = require('../src');
+const { Attachment, AuthorizingIntegrationOwners, BaseChannel } = require('../src');
 const Client = require('../src/client/Client');
 const { Channel } = require('../src/structures/Channel');
 const { Message } = require('../src/structures/Message');
@@ -114,4 +114,24 @@ test('v14 BitField export names alias legacy constructors', () => {
   ]) {
     assert.equal(api[v14Name], api[legacyName]);
   }
+});
+
+test('Attachment accepts v14 API attachment data', () => {
+  const attachment = new Attachment({
+    id: '123456789012345678',
+    filename: 'voice.ogg',
+    url: 'https://cdn.discordapp.com/attachments/voice.ogg',
+    proxy_url: 'https://media.discordapp.net/attachments/voice.ogg',
+    size: 128,
+    content_type: 'audio/ogg',
+    duration_secs: 1.5,
+    waveform: 'AQID',
+    flags: 4,
+  });
+
+  assert.equal(attachment.id, '123456789012345678');
+  assert.equal(attachment.name, 'voice.ogg');
+  assert.equal(attachment.duration, 1.5);
+  assert.equal(attachment.waveform, 'AQID');
+  assert.equal(attachment.flags.bitfield, 4);
 });

@@ -5,6 +5,7 @@ import {
   MessageManager,
   Message,
   AuthorizingIntegrationOwners,
+  Attachment,
   BaseChannel,
   IntentsBitField,
   MessagePayload,
@@ -43,6 +44,8 @@ client.channels.cache.forEach(channel => {
 });
 message.roleSubscriptionData!.tierName satisfies string;
 message.sharedClientTheme!.gradientAngle satisfies number;
+declare const attachment: Attachment;
+attachment.duration satisfies number | null;
 message.interactionMetadata!.authorizingIntegrationOwners satisfies AuthorizingIntegrationOwners;
 integrationOwners.guildId satisfies string | null;
 client.on('interactionCreate', data => {

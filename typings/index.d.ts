@@ -27,6 +27,7 @@ import {
   APIApplicationCommandOption,
   APIApplicationCommandPermission,
   APIAuditLogChange,
+  APIAttachment,
   APIButtonComponent,
   APIEmbed,
   APIEmoji,
@@ -434,6 +435,10 @@ export class AuthorizingIntegrationOwners extends Base {
   public readonly guild: Guild | null;
   public readonly user: User | null;
   public toJSON(): Record<number, Snowflake>;
+}
+
+export class Attachment extends MessageAttachment {
+  public constructor(data: APIAttachment);
 }
 
 export class ApplicationCommand<PermissionsFetchType = {}> extends Base {
@@ -2250,7 +2255,7 @@ export class Message<Cached extends boolean = boolean> extends Base {
 
   public activity: MessageActivity | null;
   public applicationId: Snowflake | null;
-  public attachments: Collection<Snowflake, MessageAttachment>;
+  public attachments: Collection<Snowflake, Attachment>;
   public author: User;
   public get bulkDeletable(): boolean;
   public readonly channel: If<Cached, GuildTextBasedChannel, TextBasedChannel>;

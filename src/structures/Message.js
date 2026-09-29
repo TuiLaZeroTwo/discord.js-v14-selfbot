@@ -2,10 +2,10 @@
 
 const process = require('node:process');
 const { Collection } = require('@discordjs/collection');
+const Attachment = require('./Attachment');
 const AuthorizingIntegrationOwners = require('./AuthorizingIntegrationOwners');
 const Base = require('./Base');
 const BaseMessageComponent = require('./BaseMessageComponent');
-const MessageAttachment = require('./MessageAttachment');
 const Embed = require('./MessageEmbed');
 const Mentions = require('./MessageMentions');
 const MessagePayload = require('./MessagePayload');
@@ -185,7 +185,7 @@ class Message extends Base {
       this.attachments = new Collection();
       if (data.attachments) {
         for (const attachment of data.attachments) {
-          this.attachments.set(attachment.id, new MessageAttachment(attachment.url, attachment.filename, attachment));
+          this.attachments.set(attachment.id, new Attachment(attachment));
         }
       }
     } else {
