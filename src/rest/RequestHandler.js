@@ -94,7 +94,7 @@ class RequestHandler {
   /*
    * Determines whether the request should be queued or whether a RateLimitError should be thrown
    */
-  async onRateLimit(request, limit, timeout, isGlobal) {
+  async onRateLimit(request, limit, timeout, isGlobal, scope = 'user') {
     const { options } = this.manager.client;
     if (!options.rejectOnRateLimit) return;
 
@@ -105,6 +105,7 @@ class RequestHandler {
       path: request.path,
       route: request.route,
       global: isGlobal,
+      scope,
     };
     const shouldThrow =
       typeof options.rejectOnRateLimit === 'function'
@@ -319,6 +320,7 @@ class RequestHandler {
       // Handle ratelimited requests
       if (res.status === 429) {
         const isGlobal = this.globalLimited;
+        const scope = res.headers.get('x-ratelimit-scope') || (isGlobal ? 'global' : 'user');
         let limit, timeout;
         if (isGlobal) {
           // Set the variables based on the global rate limit
@@ -342,7 +344,7 @@ class RequestHandler {
     Sublimit: ${sublimitTimeout ? `${sublimitTimeout}ms` : 'None'}`,
         );
 
-        await this.onRateLimit(request, limit, timeout, isGlobal);
+        await this.onRateLimit(request, limit, timeout, isGlobal, scope);
 
         // If caused by a sublimit, wait it out here so other requests on the route can be handled
         if (sublimitTimeout) {

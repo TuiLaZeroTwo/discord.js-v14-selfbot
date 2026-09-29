@@ -7759,6 +7759,7 @@ export interface RateLimitData {
   path: string;
   route: string;
   global: boolean;
+  scope: 'user' | 'global' | 'shared';
 }
 
 export interface InvalidRequestWarningData {

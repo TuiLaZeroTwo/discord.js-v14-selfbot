@@ -5,7 +5,7 @@
  * @extends Error
  */
 class RateLimitError extends Error {
-  constructor({ timeout, limit, method, path, route, global }) {
+  constructor({ timeout, limit, method, path, route, global, scope }) {
     super(`A ${global ? 'global ' : ''}rate limit was hit on route ${route}`);
 
     /**
@@ -49,6 +49,12 @@ class RateLimitError extends Error {
      * @type {number}
      */
     this.limit = limit;
+
+    /**
+     * The scope of this rate limit
+     * @type {'user'|'global'|'shared'}
+     */
+    this.scope = scope;
   }
 }
 
