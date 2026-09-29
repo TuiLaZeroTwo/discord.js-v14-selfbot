@@ -93,3 +93,25 @@ test('bulkDeletable enforces v14 age, guild, deletable, and permission checks', 
   assert.equal(bulkDeletable.call({ ...message, guild: null }), false);
   assert.equal(bulkDeletable.call({ ...message, channel: { permissionsFor: () => ({ has: () => false }) } }), false);
 });
+
+test('v14 BitField export names alias legacy constructors', () => {
+  const api = require('../src');
+
+  for (const [v14Name, legacyName] of [
+    ['ActivityFlagsBitField', 'ActivityFlags'],
+    ['ApplicationFlagsBitField', 'ApplicationFlags'],
+    ['AttachmentFlagsBitField', 'AttachmentFlags'],
+    ['ChannelFlagsBitField', 'ChannelFlags'],
+    ['GuildMemberFlagsBitField', 'GuildMemberFlags'],
+    ['IntentsBitField', 'Intents'],
+    ['InviteFlagsBitField', 'InviteFlags'],
+    ['MessageFlagsBitField', 'MessageFlags'],
+    ['PermissionsBitField', 'Permissions'],
+    ['RoleFlagsBitField', 'RoleFlags'],
+    ['SystemChannelFlagsBitField', 'SystemChannelFlags'],
+    ['ThreadMemberFlagsBitField', 'ThreadMemberFlags'],
+    ['UserFlagsBitField', 'UserFlags'],
+  ]) {
+    assert.equal(api[v14Name], api[legacyName]);
+  }
+});

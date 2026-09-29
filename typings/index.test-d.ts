@@ -6,6 +6,7 @@ import {
   Message,
   AuthorizingIntegrationOwners,
   BaseChannel,
+  IntentsBitField,
   MessagePayload,
   Options,
   RoleManager,
@@ -31,6 +32,7 @@ client.guilds satisfies GuildManager;
 clientWithV14Intents.guilds satisfies GuildManager;
 declare const baseChannel: BaseChannel;
 baseChannel.isTextBased();
+new IntentsBitField(0).has('GUILDS');
 client.options = options;
 client.guilds.fetch('123456789012345678');
 client.channels.cache.forEach(channel => {

@@ -8219,6 +8219,21 @@ export interface WelcomeChannelData {
 }
 
 export { Channel as BaseChannel };
+export {
+  ActivityFlags as ActivityFlagsBitField,
+  ApplicationFlags as ApplicationFlagsBitField,
+  AttachmentFlags as AttachmentFlagsBitField,
+  ChannelFlags as ChannelFlagsBitField,
+  GuildMemberFlags as GuildMemberFlagsBitField,
+  Intents as IntentsBitField,
+  InviteFlags as InviteFlagsBitField,
+  MessageFlags as MessageFlagsBitField,
+  Permissions as PermissionsBitField,
+  RoleFlags as RoleFlagsBitField,
+  SystemChannelFlags as SystemChannelFlagsBitField,
+  ThreadMemberFlags as ThreadMemberFlagsBitField,
+  UserFlags as UserFlagsBitField,
+};
 
 export interface WelcomeScreenEditData {
   enabled?: boolean;
