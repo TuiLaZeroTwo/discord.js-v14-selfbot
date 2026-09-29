@@ -6,6 +6,7 @@ import {
   Message,
   AuthorizingIntegrationOwners,
   Attachment,
+  Embed,
   BaseChannel,
   IntentsBitField,
   MessagePayload,
@@ -46,6 +47,8 @@ message.roleSubscriptionData!.tierName satisfies string;
 message.sharedClientTheme!.gradientAngle satisfies number;
 declare const attachment: Attachment;
 attachment.duration satisfies number | null;
+declare const embed: Embed;
+embed.setTitle('v14 compatible');
 message.interactionMetadata!.authorizingIntegrationOwners satisfies AuthorizingIntegrationOwners;
 integrationOwners.guildId satisfies string | null;
 client.on('interactionCreate', data => {

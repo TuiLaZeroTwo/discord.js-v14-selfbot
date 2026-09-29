@@ -137,6 +137,7 @@ exports.MessageAttachment = require('./structures/MessageAttachment');
 exports.MessageButton = require('./structures/MessageButton');
 exports.MessageCollector = require('./structures/MessageCollector');
 exports.MessageEmbed = require('./structures/MessageEmbed');
+exports.Embed = exports.MessageEmbed;
 exports.MessageMentions = require('./structures/MessageMentions');
 exports.MessagePayload = require('./structures/MessagePayload');
 exports.MessageReaction = require('./structures/MessageReaction');

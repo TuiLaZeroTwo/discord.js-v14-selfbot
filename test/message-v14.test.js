@@ -135,3 +135,11 @@ test('Attachment accepts v14 API attachment data', () => {
   assert.equal(attachment.waveform, 'AQID');
   assert.equal(attachment.flags.bitfield, 4);
 });
+
+test('v14 Embed export retains MessageEmbed behavior', () => {
+  const { Embed, MessageEmbed } = require('../src');
+  const embed = new Embed({ title: 'v14 embed' });
+
+  assert.equal(Embed, MessageEmbed);
+  assert.equal(embed.title, 'v14 embed');
+});

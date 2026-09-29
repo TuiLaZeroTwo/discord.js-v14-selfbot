@@ -8224,6 +8224,7 @@ export interface WelcomeChannelData {
 }
 
 export { Channel as BaseChannel };
+export { MessageEmbed as Embed };
 export {
   ActivityFlags as ActivityFlagsBitField,
   ApplicationFlags as ApplicationFlagsBitField,
