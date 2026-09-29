@@ -5897,6 +5897,7 @@ export interface ClientEvents extends BaseClientEvents {
     newAutoModerationRule: AutoModerationRule,
   ];
   cacheSweep: [message: string];
+  channelInfo: [data: Record<string, unknown>];
   channelCreate: [channel: NonThreadGuildBasedChannel];
   channelDelete: [channel: DMChannel | NonThreadGuildBasedChannel];
   channelPinsUpdate: [channel: TextBasedChannel, date: Date];
@@ -5909,6 +5910,9 @@ export interface ClientEvents extends BaseClientEvents {
   emojiDelete: [emoji: GuildEmoji];
   emojiUpdate: [oldEmoji: GuildEmoji, newEmoji: GuildEmoji];
   error: [error: Error];
+  entitlementCreate: [data: Record<string, unknown>];
+  entitlementUpdate: [data: Record<string, unknown>];
+  entitlementDelete: [data: Record<string, unknown>];
   guildAvailable: [guild: Guild];
   guildBanAdd: [ban: GuildBan];
   guildBanRemove: [ban: GuildBan];
@@ -5916,6 +5920,10 @@ export interface ClientEvents extends BaseClientEvents {
   guildDelete: [guild: Guild];
   guildUnavailable: [guild: Guild];
   guildIntegrationsUpdate: [guild: Guild];
+  guildSoundboardSoundCreate: [data: Record<string, unknown>];
+  guildSoundboardSoundUpdate: [data: Record<string, unknown>];
+  guildSoundboardSoundDelete: [data: Record<string, unknown>];
+  guildSoundboardSoundsUpdate: [data: Record<string, unknown>];
   guildMemberAdd: [member: GuildMember];
   guildMemberAvailable: [member: GuildMember | PartialGuildMember];
   guildMemberRemove: [member: GuildMember | PartialGuildMember];
@@ -5928,6 +5936,10 @@ export interface ClientEvents extends BaseClientEvents {
   guildUpdate: [oldGuild: Guild, newGuild: Guild];
   inviteCreate: [invite: Invite];
   inviteDelete: [invite: Invite];
+  integrationCreate: [data: Record<string, unknown>];
+  integrationUpdate: [data: Record<string, unknown>];
+  integrationDelete: [data: Record<string, unknown>];
+  interactionCreate: [data: Record<string, unknown>];
   /** @deprecated Use messageCreate instead */
   message: [message: Message];
   messageCreate: [message: Message];
@@ -5949,6 +5961,9 @@ export interface ClientEvents extends BaseClientEvents {
     details: MessageReactionEventDetails,
   ];
   messageUpdate: [oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage];
+  subscriptionCreate: [data: Record<string, unknown>];
+  subscriptionUpdate: [data: Record<string, unknown>];
+  subscriptionDelete: [data: Record<string, unknown>];
   presenceUpdate: [oldPresence: Presence | null, newPresence: Presence];
   ready: [client: Client<true>];
   invalidated: [];
@@ -5967,6 +5982,8 @@ export interface ClientEvents extends BaseClientEvents {
   typingStart: [typing: Typing];
   userUpdate: [oldUser: User | PartialUser, newUser: User];
   voiceChannelEffectSend: [voiceChannelEffect: VoiceChannelEffect];
+  voiceChannelStartTimeUpdate: [data: Record<string, unknown>];
+  soundboardSounds: [data: Record<string, unknown>];
   voiceStateUpdate: [oldState: VoiceState, newState: VoiceState];
   webhookUpdate: [channel: TextChannel | NewsChannel | VoiceChannel | ForumChannel | MediaChannel | StageChannel];
   shardDisconnect: [closeEvent: CloseEvent, shardId: number];

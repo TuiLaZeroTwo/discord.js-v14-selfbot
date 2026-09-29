@@ -26,6 +26,12 @@ client.guilds satisfies GuildManager;
 clientWithV14Intents.guilds satisfies GuildManager;
 client.options = options;
 client.guilds.fetch('123456789012345678');
+client.on('interactionCreate', data => {
+  data satisfies Record<string, unknown>;
+});
+client.on('guildSoundboardSoundCreate', data => {
+  data satisfies Record<string, unknown>;
+});
 
 declare const members: GuildMemberManager;
 members.fetchByMemberSafety(5_000);

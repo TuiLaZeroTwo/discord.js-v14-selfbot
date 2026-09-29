@@ -7,7 +7,7 @@ const { Collection } = require('@discordjs/collection');
 const Client = require('../src/client/Client');
 const WebSocketManager = require('../src/client/websocket/WebSocketManager');
 const WebSocketShard = require('../src/client/websocket/WebSocketShard');
-const { Events, ShardEvents } = require('../src/util/Constants');
+const { Events, ShardEvents, Status } = require('../src/util/Constants');
 const Intents = require('../src/util/Intents');
 const Options = require('../src/util/Options');
 
@@ -111,4 +111,38 @@ test('not-authenticated close clears session before reconnect', async () => {
   shard.emit(ShardEvents.CLOSE, { code: 4003 });
 
   assert.equal(shard.sessionId, null);
+});
+
+test('new v14 dispatches are exposed as payload events', () => {
+  const manager = Object.create(WebSocketManager.prototype);
+  const client = new EventEmitter();
+  const shard = { id: 0 };
+  const received = new Map();
+  const dispatches = [
+    ['CHANNEL_INFO', 'channelInfo'],
+    ['ENTITLEMENT_CREATE', 'entitlementCreate'],
+    ['ENTITLEMENT_UPDATE', 'entitlementUpdate'],
+    ['ENTITLEMENT_DELETE', 'entitlementDelete'],
+    ['GUILD_SOUNDBOARD_SOUND_CREATE', 'guildSoundboardSoundCreate'],
+    ['GUILD_SOUNDBOARD_SOUND_UPDATE', 'guildSoundboardSoundUpdate'],
+    ['GUILD_SOUNDBOARD_SOUND_DELETE', 'guildSoundboardSoundDelete'],
+    ['GUILD_SOUNDBOARD_SOUNDS_UPDATE', 'guildSoundboardSoundsUpdate'],
+    ['SOUNDBOARD_SOUNDS', 'soundboardSounds'],
+    ['INTEGRATION_CREATE', 'integrationCreate'],
+    ['INTEGRATION_UPDATE', 'integrationUpdate'],
+    ['INTEGRATION_DELETE', 'integrationDelete'],
+    ['INTERACTION_CREATE', 'interactionCreate'],
+    ['SUBSCRIPTION_CREATE', 'subscriptionCreate'],
+    ['SUBSCRIPTION_UPDATE', 'subscriptionUpdate'],
+    ['SUBSCRIPTION_DELETE', 'subscriptionDelete'],
+    ['VOICE_CHANNEL_START_TIME_UPDATE', 'voiceChannelStartTimeUpdate'],
+  ];
+  Object.assign(manager, { client, status: Status.READY, packetQueue: [] });
+  for (const [, event] of dispatches) client.on(event, data => received.set(event, data));
+
+  for (const [type, event] of dispatches) {
+    const data = { marker: type };
+    manager.handlePacket({ t: type, d: data }, shard);
+    assert.equal(received.get(event), data);
+  }
 });

@@ -384,6 +384,7 @@ exports.VoiceOpcodes = {
  * * CALL_UPDATE: callUpdate
  * * CALL_DELETE: callDelete
  * * VOICE_CHANNEL_EFFECT_SEND: voiceChannelEffectSend
+ * * VOICE_CHANNEL_START_TIME_UPDATE: voiceChannelStartTimeUpdate
  * @typedef {Object<string, string>} Events
  */
 exports.Events = {
@@ -481,6 +482,23 @@ exports.Events = {
   MESSAGE_POLL_VOTE_ADD: 'messagePollVoteAdd',
   MESSAGE_POLL_VOTE_REMOVE: 'messagePollVoteRemove',
   VOICE_CHANNEL_EFFECT_SEND: 'voiceChannelEffectSend',
+  CHANNEL_INFO: 'channelInfo',
+  ENTITLEMENT_CREATE: 'entitlementCreate',
+  ENTITLEMENT_UPDATE: 'entitlementUpdate',
+  ENTITLEMENT_DELETE: 'entitlementDelete',
+  GUILD_SOUNDBOARD_SOUND_CREATE: 'guildSoundboardSoundCreate',
+  GUILD_SOUNDBOARD_SOUND_UPDATE: 'guildSoundboardSoundUpdate',
+  GUILD_SOUNDBOARD_SOUND_DELETE: 'guildSoundboardSoundDelete',
+  GUILD_SOUNDBOARD_SOUNDS_UPDATE: 'guildSoundboardSoundsUpdate',
+  SOUNDBOARD_SOUNDS: 'soundboardSounds',
+  INTEGRATION_CREATE: 'integrationCreate',
+  INTEGRATION_UPDATE: 'integrationUpdate',
+  INTEGRATION_DELETE: 'integrationDelete',
+  INTERACTION_CREATE: 'interactionCreate',
+  SUBSCRIPTION_CREATE: 'subscriptionCreate',
+  SUBSCRIPTION_UPDATE: 'subscriptionUpdate',
+  SUBSCRIPTION_DELETE: 'subscriptionDelete',
+  VOICE_CHANNEL_START_TIME_UPDATE: 'voiceChannelStartTimeUpdate',
   // Djs v12
   VOICE_BROADCAST_SUBSCRIBE: 'subscribe',
   VOICE_BROADCAST_UNSUBSCRIBE: 'unsubscribe',
@@ -645,6 +663,23 @@ exports.WSEvents = keyMirror([
   'GUILD_SCHEDULED_EVENT_USER_ADD',
   'GUILD_SCHEDULED_EVENT_USER_REMOVE',
   'GUILD_AUDIT_LOG_ENTRY_CREATE',
+  'CHANNEL_INFO',
+  'ENTITLEMENT_CREATE',
+  'ENTITLEMENT_UPDATE',
+  'ENTITLEMENT_DELETE',
+  'GUILD_SOUNDBOARD_SOUND_CREATE',
+  'GUILD_SOUNDBOARD_SOUND_UPDATE',
+  'GUILD_SOUNDBOARD_SOUND_DELETE',
+  'GUILD_SOUNDBOARD_SOUNDS_UPDATE',
+  'SOUNDBOARD_SOUNDS',
+  'INTEGRATION_CREATE',
+  'INTEGRATION_UPDATE',
+  'INTEGRATION_DELETE',
+  'INTERACTION_CREATE',
+  'SUBSCRIPTION_CREATE',
+  'SUBSCRIPTION_UPDATE',
+  'SUBSCRIPTION_DELETE',
+  'VOICE_CHANNEL_START_TIME_UPDATE',
 ]);
 
 /**
