@@ -35,7 +35,6 @@ const Widget = require('../structures/Widget');
 const Application = require('../structures/interfaces/Application');
 const { Events, Status } = require('../util/Constants');
 const DataResolver = require('../util/DataResolver');
-const Intents = require('../util/Intents');
 const DiscordAuthWebsocket = require('../util/RemoteAuth');
 const Sweepers = require('../util/Sweepers');
 
@@ -916,7 +915,6 @@ class Client extends BaseClient {
     // Hardcode
     this.options.shardCount = 1;
     this.options.shards = [0];
-    this.options.intents = Intents.ALL;
   }
 }
 

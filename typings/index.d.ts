@@ -6023,6 +6023,7 @@ export interface ClientFetchInviteOptions {
 export type CaptchaSolver = (captcha: Captcha, UserAgent: string) => Promise<string>;
 
 export interface ClientOptions {
+  intents?: BitFieldResolvable<IntentsString, number>;
   DMChannelVoiceStatusSync?: number;
   captchaRetryLimit?: number;
   captchaSolver?: CaptchaSolver;

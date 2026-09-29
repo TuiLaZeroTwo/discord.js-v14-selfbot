@@ -11,9 +11,11 @@ import {
 } from './index';
 
 const client = new Client();
+const clientWithV14Intents = new Client({ intents: 0 });
 const options = Options.createDefault();
 
 client.guilds satisfies GuildManager;
+clientWithV14Intents.guilds satisfies GuildManager;
 client.options = options;
 client.guilds.fetch('123456789012345678');
 

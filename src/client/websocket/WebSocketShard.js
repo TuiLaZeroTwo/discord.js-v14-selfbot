@@ -715,6 +715,8 @@ class WebSocketShard extends EventEmitter {
       ...client.options.ws,
       properties,
       token: client.token,
+      intents: client.options.intents,
+      shard: [this.id, client.options.shardCount],
     };
 
     delete d.version;
