@@ -1,9 +1,13 @@
 'use strict';
 
 const assert = require('node:assert/strict');
+const EventEmitter = require('node:events');
 const test = require('node:test');
+const { Collection } = require('@discordjs/collection');
 const Client = require('../src/client/Client');
+const WebSocketManager = require('../src/client/websocket/WebSocketManager');
 const WebSocketShard = require('../src/client/websocket/WebSocketShard');
+const { Events, ShardEvents } = require('../src/util/Constants');
 const Intents = require('../src/util/Intents');
 const Options = require('../src/util/Options');
 
@@ -62,4 +66,49 @@ test('client retains configured v14 intents', () => {
 
   assert.equal(client.options.intents, 0);
   client.destroy();
+});
+
+test('invalid gateway API version disconnects without reconnect loop', async () => {
+  const manager = Object.create(WebSocketManager.prototype);
+  const shard = new EventEmitter();
+  Object.assign(shard, { id: 0, eventsAttached: false, sessionId: 'session', connect: async () => {} });
+  const client = new EventEmitter();
+  const disconnected = [];
+  let reconnects = 0;
+  client.on(Events.SHARD_DISCONNECT, (...args) => disconnected.push(args));
+  Object.assign(manager, {
+    client,
+    shardQueue: new Set([shard]),
+    shards: new Collection(),
+    debug() {},
+    reconnect() {
+      reconnects++;
+    },
+    checkShardsReady() {},
+  });
+
+  await manager.createShards();
+  shard.emit(ShardEvents.CLOSE, { code: 4012 });
+
+  assert.equal(disconnected.length, 1);
+  assert.equal(reconnects, 0);
+});
+
+test('not-authenticated close clears session before reconnect', async () => {
+  const manager = Object.create(WebSocketManager.prototype);
+  const shard = new EventEmitter();
+  Object.assign(shard, { id: 0, eventsAttached: false, sessionId: 'stale', connect: async () => {} });
+  Object.assign(manager, {
+    client: new EventEmitter(),
+    shardQueue: new Set([shard]),
+    shards: new Collection(),
+    debug() {},
+    reconnect() {},
+    checkShardsReady() {},
+  });
+
+  await manager.createShards();
+  shard.emit(ShardEvents.CLOSE, { code: 4003 });
+
+  assert.equal(shard.sessionId, null);
 });

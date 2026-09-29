@@ -4,7 +4,7 @@ const EventEmitter = require('node:events');
 const { setImmediate } = require('node:timers');
 const { setTimeout: sleep } = require('node:timers/promises');
 const { Collection } = require('@discordjs/collection');
-const { RPCErrorCodes } = require('discord-api-types/v10');
+const { GatewayCloseCodes } = require('discord-api-types/v10');
 const WebSocketShard = require('./WebSocketShard');
 const PacketHandlers = require('./handlers');
 const { Error } = require('../../errors');
@@ -20,11 +20,18 @@ const BeforeReadyWhitelist = [
   WSEvents.GUILD_MEMBER_REMOVE,
 ];
 
-const UNRECOVERABLE_CLOSE_CODES = Object.keys(WSCodes).slice(2).map(Number);
+const UNRECOVERABLE_CLOSE_CODES = [
+  GatewayCloseCodes.AuthenticationFailed,
+  GatewayCloseCodes.InvalidShard,
+  GatewayCloseCodes.ShardingRequired,
+  GatewayCloseCodes.InvalidAPIVersion,
+  GatewayCloseCodes.InvalidIntents,
+  GatewayCloseCodes.DisallowedIntents,
+];
 const UNRESUMABLE_CLOSE_CODES = [
-  RPCErrorCodes.UnknownError,
-  RPCErrorCodes.InvalidPermissions,
-  RPCErrorCodes.InvalidClientId,
+  GatewayCloseCodes.NotAuthenticated,
+  GatewayCloseCodes.InvalidSeq,
+  GatewayCloseCodes.SessionTimedOut,
 ];
 
 /**
