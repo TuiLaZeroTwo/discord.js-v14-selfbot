@@ -64,6 +64,51 @@ test('aborted REST request rejects while waiting for a route queue', async () =>
   await first;
 });
 
+test('aborted REST request cancels active fetch without retrying', async () => {
+  const client = {
+    token: 'token',
+    options: {
+      restGlobalRateLimit: 50,
+      restSweepInterval: 0,
+      restTimeOffset: 0,
+      restRequestTimeout: 5_000,
+      retryLimit: 2,
+      invalidRequestWarningInterval: 0,
+      http: {
+        api: 'https://discord.com/api',
+        cdn: 'https://cdn.discordapp.com',
+        version: 10,
+        headers: { 'User-Agent': 'test' },
+      },
+      ws: { properties: {} },
+    },
+    listenerCount: () => 0,
+    emit() {},
+  };
+  const manager = new RESTManager(client);
+  const controller = new AbortController();
+  let fetchCount = 0;
+  let notifyFetch;
+  const fetchStarted = new Promise(resolve => (notifyFetch = resolve));
+  manager.fetch = (url, options) => {
+    fetchCount++;
+    notifyFetch();
+    return new Promise((_, reject) => {
+      options.signal.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')), { once: true });
+    });
+  };
+
+  try {
+    const request = manager.api.channels('123456789012345678').get({ signal: controller.signal });
+    await fetchStarted;
+    controller.abort();
+    await assert.rejects(request, { name: 'AbortError' });
+    assert.equal(fetchCount, 1);
+  } finally {
+    clearInterval(manager.sweepInterval);
+  }
+});
+
 test('sublimited request does not block unrelated route in same bucket', async () => {
   const client = {
     token: 'token',

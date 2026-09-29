@@ -247,6 +247,7 @@ class RequestHandler {
     try {
       res = await request.make(captchaKey, captchaToken);
     } catch (error) {
+      if (request.options.signal?.aborted) throw error;
       // Retry the specified number of times for request abortions
       if (request.retries === this.manager.client.options.retryLimit) {
         throw new HTTPError(error.message, error.constructor.name, error.status, request);

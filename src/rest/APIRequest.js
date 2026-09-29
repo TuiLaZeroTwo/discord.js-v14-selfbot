@@ -136,6 +136,10 @@ class APIRequest {
     }
 
     const controller = new AbortController();
+    const userSignal = this.options.signal;
+    const abortRequest = () => controller.abort(userSignal.reason);
+    if (userSignal?.aborted) abortRequest();
+    else userSignal?.addEventListener('abort', abortRequest, { once: true });
     const timeout = setTimeout(() => controller.abort(), this.client.options.restRequestTimeout).unref();
     return this.rest
       .fetch(url, {
@@ -147,7 +151,10 @@ class APIRequest {
         dispatcher: agent,
         credentials: 'include',
       })
-      .finally(() => clearTimeout(timeout));
+      .finally(() => {
+        clearTimeout(timeout);
+        userSignal?.removeEventListener('abort', abortRequest);
+      });
   }
 }
 
