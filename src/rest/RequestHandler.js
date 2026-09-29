@@ -22,6 +22,16 @@ const captchaMessage = [
   'sitekey-secret-mismatch',
 ];
 
+function hasSublimit(request) {
+  if (request.route !== '/channels/:id') {
+    return true;
+  }
+  if (request.method.toUpperCase() !== 'PATCH' || !request.options.data || typeof request.options.data !== 'object') {
+    return false;
+  }
+  return ['name', 'topic'].some(key => key in request.options.data);
+}
+
 function parseResponse(res) {
   if (res.headers.get('content-type')?.startsWith('application/json')) return res.json();
   return res.arrayBuffer();
@@ -55,14 +65,38 @@ class RequestHandler {
     this.reset = -1;
     this.remaining = -1;
     this.limit = -1;
+    this.sublimitedQueue = null;
   }
 
   async push(request) {
-    await this.queue.wait();
+    const queueState = { mainHeld: false, sublimitHeld: false };
+    queueState.enterSublimit = async () => {
+      if (queueState.mainHeld) {
+        this.queue.shift();
+        queueState.mainHeld = false;
+      }
+      if (!queueState.sublimitHeld) {
+        this.sublimitedQueue ??= new AsyncQueue();
+        await this.sublimitedQueue.wait({ signal: request.options.signal });
+        queueState.sublimitHeld = true;
+      }
+    };
+    if (this.sublimitedQueue && hasSublimit(request)) {
+      await this.sublimitedQueue.wait({ signal: request.options.signal });
+      queueState.sublimitHeld = true;
+    } else {
+      await this.queue.wait({ signal: request.options.signal });
+      queueState.mainHeld = true;
+      if (this.sublimitedQueue && hasSublimit(request)) await queueState.enterSublimit();
+    }
     try {
-      return await this.execute(request);
+      return await this.execute(request, undefined, undefined, queueState);
     } finally {
-      this.queue.shift();
+      if (queueState.mainHeld) this.queue.shift();
+      if (queueState.sublimitHeld) {
+        this.sublimitedQueue.shift();
+        if (this.sublimitedQueue.remaining === 0) this.sublimitedQueue = null;
+      }
     }
   }
 
@@ -79,7 +113,9 @@ class RequestHandler {
   }
 
   get _inactive() {
-    return this.queue.remaining === 0 && !this.limited;
+    return (
+      this.queue.remaining === 0 && (!this.sublimitedQueue || this.sublimitedQueue.remaining === 0) && !this.limited
+    );
   }
 
   globalDelayFor(ms) {
@@ -116,7 +152,7 @@ class RequestHandler {
     }
   }
 
-  async execute(request, captchaKey, captchaToken) {
+  async execute(request, captchaKey, captchaToken, queueState) {
     /*
      * After calculations have been done, pre-emptively stop further requests
      * Potentially loop until this task can run if e.g. the global rate limit is hit twice
@@ -215,7 +251,7 @@ class RequestHandler {
       }
 
       request.retries++;
-      return this.execute(request);
+      return this.execute(request, undefined, undefined, queueState);
     }
 
     if (this.manager.client.listenerCount(API_RESPONSE)) {
@@ -350,9 +386,14 @@ class RequestHandler {
 
         // If caused by a sublimit, wait it out here so other requests on the route can be handled
         if (sublimitTimeout) {
-          await sleep(sublimitTimeout);
+          if (hasSublimit(request)) {
+            await queueState.enterSublimit();
+            await sleep(sublimitTimeout);
+          } else {
+            await sleep(sublimitTimeout);
+          }
         }
-        return this.execute(request);
+        return this.execute(request, undefined, undefined, queueState);
       }
 
       // Handle possible malformed requests
@@ -387,7 +428,7 @@ class RequestHandler {
     rqToken : ${data.captcha_rqtoken}`,
           );
           request.retries++;
-          return this.execute(request, captcha, data.captcha_rqtoken);
+          return this.execute(request, captcha, data.captcha_rqtoken, queueState);
         }
         // Two factor handling
         if (data?.code && data.code == 60003 && request.options.auth !== false && request.retries < 1) {
@@ -431,7 +472,7 @@ class RequestHandler {
             });
             request.options.mfaToken = mfaPost.token;
             request.retries++;
-            return this.execute(request);
+            return this.execute(request, undefined, undefined, queueState);
           }
         }
       } catch (err) {
@@ -449,7 +490,7 @@ class RequestHandler {
       }
 
       request.retries++;
-      return this.execute(request);
+      return this.execute(request, undefined, undefined, queueState);
     }
 
     // Fallback in the rare case a status code outside the range 200..=599 is returned
