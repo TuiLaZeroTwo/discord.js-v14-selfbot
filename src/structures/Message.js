@@ -2,6 +2,7 @@
 
 const process = require('node:process');
 const { Collection } = require('@discordjs/collection');
+const AuthorizingIntegrationOwners = require('./AuthorizingIntegrationOwners');
 const Base = require('./Base');
 const BaseMessageComponent = require('./BaseMessageComponent');
 const MessageAttachment = require('./MessageAttachment');
@@ -383,6 +384,12 @@ class Message extends Base {
       };
     } else {
       this.interaction ??= null;
+    }
+
+    if (data.interaction_metadata) {
+      this.interactionMetadata = transformInteractionMetadata(this.client, data.interaction_metadata);
+    } else {
+      this.interactionMetadata ??= null;
     }
 
     if (data.message_snapshots) {
@@ -1282,6 +1289,22 @@ class Message extends Base {
       },
     });
   }
+}
+
+function transformInteractionMetadata(client, data) {
+  return {
+    id: data.id,
+    type: data.type,
+    user: client.users._add(data.user),
+    authorizingIntegrationOwners: new AuthorizingIntegrationOwners(client, data.authorizing_integration_owners),
+    originalResponseMessageId: data.original_response_message_id ?? null,
+    interactedMessageId: data.interacted_message_id ?? null,
+    targetUser: data.target_user ? client.users._add(data.target_user) : null,
+    targetMessageId: data.target_message_id ?? null,
+    triggeringInteractionMetadata: data.triggering_interaction_metadata
+      ? transformInteractionMetadata(client, data.triggering_interaction_metadata)
+      : null,
+  };
 }
 
 exports.Message = Message;

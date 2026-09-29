@@ -4,6 +4,7 @@ import {
   GuildMemberManager,
   MessageManager,
   Message,
+  AuthorizingIntegrationOwners,
   MessagePayload,
   Options,
   RoleManager,
@@ -23,6 +24,7 @@ const clientWithV14Intents = new Client({
 });
 const options = Options.createDefault();
 declare const message: Message;
+declare const integrationOwners: AuthorizingIntegrationOwners;
 
 client.guilds satisfies GuildManager;
 clientWithV14Intents.guilds satisfies GuildManager;
@@ -30,6 +32,8 @@ client.options = options;
 client.guilds.fetch('123456789012345678');
 message.roleSubscriptionData!.tierName satisfies string;
 message.sharedClientTheme!.gradientAngle satisfies number;
+message.interactionMetadata!.authorizingIntegrationOwners satisfies AuthorizingIntegrationOwners;
+integrationOwners.guildId satisfies string | null;
 client.on('interactionCreate', data => {
   data satisfies Record<string, unknown>;
 });

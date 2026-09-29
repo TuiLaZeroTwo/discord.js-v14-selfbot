@@ -426,6 +426,16 @@ export abstract class Application extends Base {
   public toString(): string | null;
 }
 
+export class AuthorizingIntegrationOwners extends Base {
+  public constructor(client: Client, data: Record<number, Snowflake>);
+  public readonly data: Record<number, Snowflake>;
+  public readonly guildId: Snowflake | null;
+  public readonly userId: Snowflake | null;
+  public readonly guild: Guild | null;
+  public readonly user: User | null;
+  public toJSON(): Record<number, Snowflake>;
+}
+
 export class ApplicationCommand<PermissionsFetchType = {}> extends Base {
   private constructor(client: Client, data: RawApplicationCommandData, guild?: Guild, guildId?: Snowflake);
   public applicationId: Snowflake;
@@ -2260,6 +2270,7 @@ export class Message<Cached extends boolean = boolean> extends Base {
   public readonly hasThread: boolean;
   public id: Snowflake;
   public interaction: MessageInteraction | null;
+  public interactionMetadata: MessageInteractionMetadata | null;
   public readonly member: GuildMember | null;
   public mentions: MessageMentions;
   public nonce: string | number | null;
@@ -7438,6 +7449,18 @@ export interface MessageInteraction {
   type: InteractionType;
   commandName: string;
   user: User;
+}
+
+export interface MessageInteractionMetadata {
+  id: Snowflake;
+  type: number;
+  user: User;
+  authorizingIntegrationOwners: AuthorizingIntegrationOwners;
+  originalResponseMessageId: Snowflake | null;
+  interactedMessageId: Snowflake | null;
+  targetUser: User | null;
+  targetMessageId: Snowflake | null;
+  triggeringInteractionMetadata: MessageInteractionMetadata | null;
 }
 
 export interface MessageMentionsHasOptions {
