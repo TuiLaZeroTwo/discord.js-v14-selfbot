@@ -50,7 +50,9 @@ class Intents extends BitField {}
 Intents.FLAGS = {
   GUILDS: 1 << 0,
   GUILD_MEMBERS: 1 << 1,
+  GUILD_MODERATION: 1 << 2,
   GUILD_BANS: 1 << 2,
+  GUILD_EXPRESSIONS: 1 << 3,
   GUILD_EMOJIS_AND_STICKERS: 1 << 3,
   GUILD_INTEGRATIONS: 1 << 4,
   GUILD_WEBHOOKS: 1 << 5,
@@ -67,6 +69,8 @@ Intents.FLAGS = {
   GUILD_SCHEDULED_EVENTS: 1 << 16,
   AUTO_MODERATION_CONFIGURATION: 1 << 20,
   AUTO_MODERATION_EXECUTION: 1 << 21,
+  GUILD_MESSAGE_POLLS: 1 << 24,
+  DIRECT_MESSAGE_POLLS: 1 << 25,
 };
 
 Intents.ALL = Object.values(Intents.FLAGS).reduce((all, p) => all | p, 0);

@@ -7157,7 +7157,9 @@ export interface InteractionUpdateOptions extends MessageEditOptions {
 export type IntentsString =
   | 'GUILDS'
   | 'GUILD_MEMBERS'
+  | 'GUILD_MODERATION'
   | 'GUILD_BANS'
+  | 'GUILD_EXPRESSIONS'
   | 'GUILD_EMOJIS_AND_STICKERS'
   | 'GUILD_INTEGRATIONS'
   | 'GUILD_WEBHOOKS'
@@ -7173,7 +7175,9 @@ export type IntentsString =
   | 'MESSAGE_CONTENT'
   | 'GUILD_SCHEDULED_EVENTS'
   | 'AUTO_MODERATION_CONFIGURATION'
-  | 'AUTO_MODERATION_EXECUTION';
+  | 'AUTO_MODERATION_EXECUTION'
+  | 'GUILD_MESSAGE_POLLS'
+  | 'DIRECT_MESSAGE_POLLS';
 
 export type GuildInvitableChannelResolvable =
   | TextChannel
@@ -8134,8 +8138,12 @@ export type WebhookType = keyof typeof WebhookTypes;
 
 export interface WebSocketOptions {
   agent?: Omit<AgentOptions, 'keepAlive'>;
+  capabilities?: number;
   compress?: boolean;
+  client_state?: { guild_versions?: Record<Snowflake, number> };
+  large_threshold?: number;
   properties?: WebSocketProperties;
+  version?: number;
 }
 
 export interface WebSocketProperties {

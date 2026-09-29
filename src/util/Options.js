@@ -266,7 +266,7 @@ class Options extends null {
         client_state: {
           guild_versions: {},
         },
-        version: 9,
+        version: 10,
         agent: {},
       },
       http: {

@@ -5,6 +5,19 @@ const test = require('node:test');
 const Client = require('../src/client/Client');
 const WebSocketShard = require('../src/client/websocket/WebSocketShard');
 const Intents = require('../src/util/Intents');
+const Options = require('../src/util/Options');
+
+test('default gateway version is v10', () => {
+  assert.equal(Options.createDefault().ws.version, 10);
+});
+
+test('intent flags include v14 moderation, expression, and poll intents', () => {
+  assert.equal(Intents.FLAGS.GUILD_MODERATION, 1 << 2);
+  assert.equal(Intents.FLAGS.GUILD_EXPRESSIONS, 1 << 3);
+  assert.equal(Intents.FLAGS.GUILD_MESSAGE_POLLS, 1 << 24);
+  assert.equal(Intents.FLAGS.DIRECT_MESSAGE_POLLS, 1 << 25);
+  assert.ok(Intents.ALL & Intents.FLAGS.DIRECT_MESSAGE_POLLS);
+});
 
 test('identify payload includes v14 intents and shard data with selfbot state', () => {
   let payload;

@@ -11,7 +11,15 @@ import {
 } from './index';
 
 const client = new Client();
-const clientWithV14Intents = new Client({ intents: 0 });
+const clientWithV14Intents = new Client({
+  intents: 0,
+  ws: {
+    capabilities: 0,
+    client_state: { guild_versions: { '123456789012345678': 1 } },
+    large_threshold: 50,
+    version: 10,
+  },
+});
 const options = Options.createDefault();
 
 client.guilds satisfies GuildManager;
