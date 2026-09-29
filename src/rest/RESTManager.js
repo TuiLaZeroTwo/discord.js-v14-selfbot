@@ -15,6 +15,7 @@ class RESTManager {
   constructor(client) {
     this.client = client;
     this.handlers = new Collection();
+    this.hashes = new Collection();
     this.versioned = true;
     this.globalLimit = client.options.restGlobalRateLimit > 0 ? client.options.restGlobalRateLimit : Infinity;
     this.globalRemaining = this.globalLimit;
@@ -45,14 +46,23 @@ class RESTManager {
 
   request(method, url, options = {}) {
     const apiRequest = new APIRequest(this, method, url, options);
-    let handler = this.handlers.get(apiRequest.route);
+    const routeKey = `${method}:${apiRequest.route}`;
+    const bucketHash = this.hashes.get(routeKey);
+    const handlerKey = `${bucketHash ?? `Global(${routeKey})`}:${options.majorParameter ?? 'global'}`;
+    let handler = this.handlers.get(handlerKey);
 
     if (!handler) {
       handler = new RequestHandler(this);
-      this.handlers.set(apiRequest.route, handler);
+      this.handlers.set(handlerKey, handler);
     }
 
+    apiRequest.handlerKey = handlerKey;
     return handler.push(apiRequest);
+  }
+
+  setBucketHash(request, hash) {
+    const routeKey = `${request.method}:${request.route}`;
+    this.hashes.set(routeKey, hash);
   }
 
   get endpoint() {

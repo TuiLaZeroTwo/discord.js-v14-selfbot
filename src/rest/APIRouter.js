@@ -18,13 +18,26 @@ function buildRoute(manager) {
       if (reflectors.includes(name)) return () => route.join('/');
       if (methods.includes(name)) {
         const routeBucket = [];
+        let majorParameter = 'global';
+        if (route[1] === 'interactions' && route[4] === 'callback') {
+          majorParameter = 'burst';
+        } else if (/^\d{16,19}$/.test(route[2]) && ['channels', 'guilds'].includes(route[1])) {
+          majorParameter = route[2];
+        } else if (/^\d{16,19}$/.test(route[2]) && route[1] === 'webhooks') {
+          majorParameter = `${route[2]}/${route[3]}`;
+        }
+
         for (let i = 0; i < route.length; i++) {
-          // Reactions routes and sub-routes all share the same bucket
-          if (route[i - 1] === 'reactions') break;
-          // Literal ids should only be taken account if they are the Major id (the Channel/Guild id)
-          if (/\d{16,19}/g.test(route[i]) && !/channels|guilds/.test(route[i - 1])) routeBucket.push(':id');
-          // All other parts of the route should be considered as part of the bucket identifier
-          else routeBucket.push(route[i]);
+          if (/^\d{16,19}$/.test(route[i])) {
+            routeBucket.push(':id');
+          } else if (route[1] === 'webhooks' && i === 3) {
+            routeBucket.push(':token');
+          } else if (route[i - 1] === 'reactions') {
+            routeBucket.push(':reaction');
+            break;
+          } else {
+            routeBucket.push(route[i]);
+          }
         }
         return options =>
           manager.request(
@@ -34,6 +47,7 @@ function buildRoute(manager) {
               {
                 versioned: manager.versioned,
                 route: routeBucket.join('/'),
+                majorParameter,
               },
               options,
             ),

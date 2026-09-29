@@ -248,6 +248,8 @@ class RequestHandler {
       const remaining = res.headers.get('x-ratelimit-remaining');
       const reset = res.headers.get('x-ratelimit-reset');
       const resetAfter = res.headers.get('x-ratelimit-reset-after');
+      const bucketHash = res.headers.get('x-ratelimit-bucket');
+      if (bucketHash) this.manager.setBucketHash(request, bucketHash);
       this.limit = limit ? Number(limit) : Infinity;
       this.remaining = remaining ? Number(remaining) : 1;
 
