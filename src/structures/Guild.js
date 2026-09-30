@@ -18,6 +18,7 @@ const GuildInviteManager = require('../managers/GuildInviteManager');
 const GuildMemberManager = require('../managers/GuildMemberManager');
 const GuildScheduledEventManager = require('../managers/GuildScheduledEventManager');
 const GuildSettingManager = require('../managers/GuildSettingManager');
+const GuildSoundboardSoundManager = require('../managers/GuildSoundboardSoundManager');
 const GuildStickerManager = require('../managers/GuildStickerManager');
 const PresenceManager = require('../managers/PresenceManager');
 const RoleManager = require('../managers/RoleManager');
@@ -118,6 +119,12 @@ class Guild extends AnonymousGuild {
      * @type {AutoModerationRuleManager}
      */
     this.autoModerationRules = new AutoModerationRuleManager(this);
+
+    /**
+     * A manager of the soundboard sounds of this guild.
+     * @type {GuildSoundboardSoundManager}
+     */
+    this.soundboardSounds = new GuildSoundboardSoundManager(this);
 
     /**
      * All of the settings {@link Object}
@@ -548,6 +555,10 @@ class Guild extends AnonymousGuild {
         guild_id: this.id,
         stickers: data.stickers,
       });
+    }
+
+    if (data.soundboard_sounds) {
+      for (const sound of data.soundboard_sounds) this.soundboardSounds._add(sound);
     }
 
     if ('incidents_data' in data) {

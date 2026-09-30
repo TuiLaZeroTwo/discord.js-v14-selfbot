@@ -21,6 +21,9 @@ import {
   SKU,
   Subscription,
   SoundboardSound,
+  GuildSoundboardSoundManager,
+  EntitlementManager,
+  SubscriptionManager,
   BaseChannel,
   IntentsBitField,
   MessagePayload,
@@ -65,6 +68,12 @@ declare const subscription: Subscription;
 subscription.currentPeriodStartAt satisfies Date;
 declare const soundboardSound: SoundboardSound;
 soundboardSound.volume satisfies number | null;
+declare const soundboardManager: GuildSoundboardSoundManager;
+soundboardManager.fetch();
+declare const entitlementManager: EntitlementManager;
+entitlementManager.consume('123456789012345678');
+declare const subscriptionManager: SubscriptionManager;
+subscriptionManager.fetch({ sku: '123456789012345678' });
 Colors.BLURPLE satisfies number;
 Events.CLIENT_READY satisfies string;
 Partials.MESSAGE satisfies string;

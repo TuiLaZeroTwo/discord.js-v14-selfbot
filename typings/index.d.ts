@@ -1610,6 +1610,7 @@ export class Guild extends AnonymousGuild {
   public readonly shard: WebSocketShard;
   public shardId: number;
   public stageInstances: StageInstanceManager;
+  public soundboardSounds: GuildSoundboardSoundManager;
   public stickers: GuildStickerManager;
   public incidentsData: IncidentActions | null;
   public readonly systemChannel: TextChannel | null;
@@ -3501,9 +3502,14 @@ export interface GuildSoundboardSoundEditOptions {
   emoji?: EmojiIdentifierResolvable | null;
 }
 
-export interface GuildSoundboardSoundCreateOptions extends GuildSoundboardSoundEditOptions {
+export interface GuildSoundboardSoundCreateOptions {
+  file: BufferResolvable | Stream;
   name: string;
-  sound: BufferResolvable | Stream;
+  contentType?: string;
+  volume?: number | null;
+  emojiId?: Snowflake | null;
+  emojiName?: string | null;
+  reason?: string;
 }
 
 export class SoundboardSound extends Base {
@@ -4924,6 +4930,21 @@ export class GuildScheduledEventManager extends CachedManager<
   ): Promise<GuildScheduledEventManagerFetchSubscribersResult<T>>;
 }
 
+export type SoundboardSoundResolvable = SoundboardSound | Snowflake;
+
+export class GuildSoundboardSoundManager extends CachedManager<Snowflake, SoundboardSound, SoundboardSoundResolvable> {
+  private constructor(guild: Guild, iterable?: Iterable<RawSoundboardSoundData>);
+  public guild: Guild;
+  public create(options: GuildSoundboardSoundCreateOptions): Promise<SoundboardSound>;
+  public edit(
+    soundboardSound: SoundboardSoundResolvable,
+    options?: GuildSoundboardSoundEditOptions,
+  ): Promise<SoundboardSound>;
+  public delete(soundboardSound: SoundboardSoundResolvable, reason?: string): Promise<void>;
+  public fetch(options: SoundboardSoundResolvable | BaseFetchOptions): Promise<SoundboardSound>;
+  public fetch(options?: { cache?: boolean }): Promise<Collection<Snowflake, SoundboardSound>>;
+}
+
 export class GuildStickerManager extends CachedManager<Snowflake, Sticker, StickerResolvable> {
   private constructor(guild: Guild, iterable?: Iterable<RawStickerData>);
   public guild: Guild;
@@ -5711,6 +5732,61 @@ export class AutoModerationRuleManager extends CachedManager<
   public fetch(options: AutoModerationRuleResolvable | FetchAutoModerationRuleOptions): Promise<AutoModerationRule>;
   public fetch(options?: FetchAutoModerationRulesOptions): Promise<Collection<Snowflake, AutoModerationRule>>;
   public delete(autoModerationRule: AutoModerationRuleResolvable, reason?: string): Promise<void>;
+}
+
+export type EntitlementResolvable = Entitlement | Snowflake;
+
+export type SKUResolvable = SKU | Snowflake;
+
+export interface FetchEntitlementsOptions {
+  limit?: number;
+  guild?: GuildResolvable;
+  user?: UserResolvable;
+  skus?: SKUResolvable[];
+  excludeEnded?: boolean;
+  excludeDeleted?: boolean;
+  cache?: boolean;
+  before?: Snowflake;
+  after?: Snowflake;
+}
+
+export interface EntitlementCreateOptions {
+  sku: SKUResolvable;
+  guild?: GuildResolvable;
+  user?: UserResolvable;
+}
+
+export class EntitlementManager extends CachedManager<Snowflake, Entitlement, EntitlementResolvable> {
+  private constructor(client: Client, iterable?: Iterable<RawEntitlementData>);
+  public fetch(
+    options?: EntitlementResolvable | FetchEntitlementsOptions,
+  ): Promise<Entitlement | Collection<Snowflake, Entitlement>>;
+  public createTest(options: EntitlementCreateOptions): Promise<Entitlement>;
+  public deleteTest(entitlement: EntitlementResolvable): Promise<void>;
+  public consume(entitlementId: Snowflake): Promise<void>;
+}
+
+export interface FetchSubscriptionOptions {
+  sku: SKUResolvable;
+  subscriptionId?: Snowflake;
+  cache?: boolean;
+  force?: boolean;
+}
+
+export interface FetchSubscriptionsOptions {
+  after?: Snowflake;
+  before?: Snowflake;
+  limit?: number;
+  sku: SKUResolvable;
+  user?: UserResolvable;
+  cache?: boolean;
+}
+
+export class SubscriptionManager extends CachedManager<Snowflake, Subscription, Subscription> {
+  private constructor(client: Client, iterable?: Iterable<RawSubscriptionData>);
+  public fetch(
+    options: FetchSubscriptionOptions | FetchSubscriptionsOptions,
+  ): Promise<Subscription | Collection<Snowflake, Subscription>>;
 }
 
 export interface ApplicationCommandPermissionData {

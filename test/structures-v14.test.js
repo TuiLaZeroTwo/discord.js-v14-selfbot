@@ -2,8 +2,35 @@
 
 const assert = require('node:assert/strict');
 const test = require('node:test');
+const { Collection } = require('@discordjs/collection');
 const { Entitlement, SKU, SKUFlags, SoundboardSound, Subscription } = require('../src');
 const Client = require('../src/client/Client');
+const GuildSoundboardSoundManager = require('../src/managers/GuildSoundboardSoundManager');
+const buildRoute = require('../src/rest/APIRouter');
+
+function makeSoundboardClient(soundId) {
+  const requests = [];
+  const client = {
+    options: { makeCache: () => new Collection() },
+    _cleanups: new Set(),
+    _finalizers: { register() {} },
+  };
+  Object.defineProperty(client, 'api', {
+    get: () =>
+      buildRoute({
+        versioned: true,
+        request(method, url, options) {
+          requests.push({ method, url, route: options.route, data: options.data });
+          if (method === 'get' && !/soundboard-sounds\/\d/.test(url)) {
+            return Promise.resolve({ items: [{ sound_id: soundId, name: 'boop', volume: 0.5 }] });
+          }
+          if (method === 'delete') return Promise.resolve();
+          return Promise.resolve({ sound_id: soundId, name: 'boop', volume: 0.5 });
+        },
+      }),
+  });
+  return { client, requests };
+}
 
 test('Entitlement maps v14 fields and activity helpers', () => {
   const client = new Client({ intents: 0 });
@@ -113,4 +140,26 @@ test('SoundboardSound maps v14 fields and equals raw payload', () => {
   assert.ok(sound.createdTimestamp > 0);
   assert.equal(sound.equals(data), true);
   client.destroy();
+});
+
+test('GuildSoundboardSoundManager routes v14 soundboard endpoints', async () => {
+  const soundId = '123456789012345678';
+  const { client, requests } = makeSoundboardClient(soundId);
+  const guild = { id: '323456789012345678', client };
+  const manager = new GuildSoundboardSoundManager(guild);
+
+  const sounds = await manager.fetch();
+  assert.equal(sounds.size, 1);
+  assert.equal(sounds.get(soundId).name, 'boop');
+
+  const single = await manager.fetch({ soundboardSound: soundId, force: true });
+  assert.equal(single.soundId, soundId);
+
+  await manager.edit(soundId, { name: 'renamed' });
+  await manager.delete(soundId, 'cleanup');
+
+  assert.ok(requests.some(r => r.method === 'get' && r.route === '/guilds/:id/soundboard-sounds'));
+  assert.ok(requests.some(r => r.method === 'get' && r.route === '/guilds/:id/soundboard-sounds/:id'));
+  assert.ok(requests.some(r => r.method === 'patch' && r.route === '/guilds/:id/soundboard-sounds/:id'));
+  assert.ok(requests.some(r => r.method === 'delete' && r.route === '/guilds/:id/soundboard-sounds/:id'));
 });
