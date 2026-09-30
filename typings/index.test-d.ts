@@ -17,6 +17,10 @@ import {
   ContextMenuCommandInteraction,
   StringSelectMenuComponent,
   StringSelectMenuInteraction,
+  Entitlement,
+  SKU,
+  Subscription,
+  SoundboardSound,
   BaseChannel,
   IntentsBitField,
   MessagePayload,
@@ -52,6 +56,15 @@ declare const chatInputInteraction: ChatInputCommandInteraction;
 declare const contextInteraction: ContextMenuCommandInteraction;
 declare const selectComponent: StringSelectMenuComponent;
 declare const selectInteraction: StringSelectMenuInteraction;
+declare const entitlement: Entitlement;
+entitlement.isActive();
+entitlement.guildId satisfies string | null;
+declare const sku: SKU;
+sku.flags.has('AVAILABLE');
+declare const subscription: Subscription;
+subscription.currentPeriodStartAt satisfies Date;
+declare const soundboardSound: SoundboardSound;
+soundboardSound.volume satisfies number | null;
 Colors.BLURPLE satisfies number;
 Events.CLIENT_READY satisfies string;
 Partials.MESSAGE satisfies string;

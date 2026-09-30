@@ -136,6 +136,7 @@ import {
   RawChannelData,
   RawDMChannelData,
   RawEmojiData,
+  RawEntitlementData,
   RawGuildAuditLogData,
   RawGuildAuditLogEntryData,
   RawGuildBanData,
@@ -168,9 +169,12 @@ import {
   RawReactionEmojiData,
   RawRichPresenceAssets,
   RawRoleData,
+  RawSKUData,
+  RawSoundboardSoundData,
   RawStageInstanceData,
   RawStickerData,
   RawStickerPackData,
+  RawSubscriptionData,
   RawTeamData,
   RawTeamMemberData,
   RawTextInputComponentData,
@@ -3444,6 +3448,96 @@ export class StickerPack extends Base {
   public skuId: Snowflake;
   public stickers: Collection<Snowflake, Sticker>;
   public bannerURL(options?: StaticImageURLOptions): string | null;
+}
+
+export class Entitlement extends Base {
+  private constructor(client: Client, data: RawEntitlementData);
+  public id: Snowflake;
+  public skuId: Snowflake;
+  public userId: Snowflake;
+  public guildId: Snowflake | null;
+  public applicationId: Snowflake;
+  public type: number;
+  public deleted: boolean;
+  public startsTimestamp: number | null;
+  public endsTimestamp: number | null;
+  public consumed: boolean;
+  public readonly guild: Guild | null;
+  public readonly startsAt: Date | null;
+  public readonly endsAt: Date | null;
+  public isActive(): boolean;
+  public isTest(): boolean;
+  public isUserSubscription(): boolean;
+  public isGuildSubscription(): boolean;
+  public fetchUser(): Promise<User>;
+  public consume(): Promise<void>;
+}
+
+export type SKUFlagsString = 'AVAILABLE' | 'GUILD_SUBSCRIPTION' | 'USER_SUBSCRIPTION';
+
+export type SKUFlagsResolvable = BitFieldResolvable<SKUFlagsString, number>;
+
+export class SKUFlags extends BitField<SKUFlagsString> {
+  public static FLAGS: Record<SKUFlagsString, number>;
+  public static resolve(bit?: SKUFlagsResolvable): number;
+}
+
+export { SKUFlags as SKUFlagsBitField };
+
+export class SKU extends Base {
+  private constructor(client: Client, data: RawSKUData);
+  public id: Snowflake;
+  public type: number;
+  public applicationId: Snowflake;
+  public name: string;
+  public slug: string;
+  public readonly flags: Readonly<SKUFlags>;
+}
+
+export interface GuildSoundboardSoundEditOptions {
+  name?: string;
+  volume?: number;
+  emojiId?: Snowflake | null;
+  emoji?: EmojiIdentifierResolvable | null;
+}
+
+export interface GuildSoundboardSoundCreateOptions extends GuildSoundboardSoundEditOptions {
+  name: string;
+  sound: BufferResolvable | Stream;
+}
+
+export class SoundboardSound extends Base {
+  private constructor(client: Client, data: RawSoundboardSoundData);
+  public readonly soundId: Snowflake | string;
+  public available: boolean | null;
+  public name: string | null;
+  public volume: number | null;
+  public guildId: Snowflake | null;
+  public user: User | null;
+  public readonly createdTimestamp: number;
+  public readonly createdAt: Date;
+  public readonly emoji: Emoji | null;
+  public readonly guild: Guild | null;
+  public edit(options: GuildSoundboardSoundEditOptions): Promise<SoundboardSound>;
+  public delete(reason?: string): Promise<SoundboardSound>;
+  public equals(other: SoundboardSound | RawSoundboardSoundData): boolean;
+}
+
+export class Subscription extends Base {
+  private constructor(client: Client, data: RawSubscriptionData);
+  public id: Snowflake;
+  public userId: Snowflake;
+  public skuIds: Snowflake[];
+  public entitlementIds: Snowflake[];
+  public currentPeriodStartTimestamp: number;
+  public currentPeriodEndTimestamp: number;
+  public status: number;
+  public renewalSkuIds?: Snowflake[];
+  public canceledTimestamp: number | null;
+  public country: string | null;
+  public readonly canceledAt: Date | null;
+  public readonly currentPeriodStartAt: Date;
+  public readonly currentPeriodEndAt: Date;
 }
 
 /** @deprecated See [Self-serve Game Selling Deprecation](https://support-dev.discord.com/hc/en-us/articles/6309018858647) for more information */

@@ -91,6 +91,10 @@ import {
   LocalizationMap,
   APIActionRowComponent,
   APIComponentInMessageActionRow,
+  APIEntitlement,
+  APISKU,
+  APISoundboardSound,
+  APISubscription,
 } from 'discord-api-types/v10';
 import { GuildChannel, Guild, PermissionOverwrites } from '.';
 import type {
@@ -128,6 +132,14 @@ export type RawEmojiData =
   | Omit<Partial<APIPartialEmoji>, 'animated'>;
 export type RawGuildEmojiData = APIEmoji;
 export type RawReactionEmojiData = APIEmoji | APIPartialEmoji;
+
+export type RawEntitlementData = APIEntitlement;
+
+export type RawSKUData = APISKU;
+
+export type RawSoundboardSoundData = APISoundboardSound;
+
+export type RawSubscriptionData = APISubscription;
 
 export type RawGuildAuditLogData = APIAuditLog;
 
