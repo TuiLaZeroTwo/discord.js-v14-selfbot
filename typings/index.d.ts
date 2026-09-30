@@ -4345,6 +4345,20 @@ export const Constants: {
 
 export const version: string;
 
+export const Colors: ConstantsColors;
+export const Events: ConstantsEvents;
+export const ShardEvents: ConstantsShardEvents;
+export const Status: ConstantsStatus;
+
+export class Partials {
+  public static readonly USER: 'USER';
+  public static readonly CHANNEL: 'CHANNEL';
+  public static readonly GUILD_MEMBER: 'GUILD_MEMBER';
+  public static readonly MESSAGE: 'MESSAGE';
+  public static readonly REACTION: 'REACTION';
+  public static readonly GUILD_SCHEDULED_EVENT: 'GUILD_SCHEDULED_EVENT';
+}
+
 //#endregion
 
 //#region Managers
@@ -6337,6 +6351,23 @@ export interface ConstantsEvents {
   CALL_DELETE: 'callDelete';
   MESSAGE_POLL_VOTE_ADD: 'messagePollVoteAdd';
   MESSAGE_POLL_VOTE_REMOVE: 'messagePollVoteRemove';
+  CHANNEL_INFO: 'channelInfo';
+  ENTITLEMENT_CREATE: 'entitlementCreate';
+  ENTITLEMENT_UPDATE: 'entitlementUpdate';
+  ENTITLEMENT_DELETE: 'entitlementDelete';
+  GUILD_SOUNDBOARD_SOUND_CREATE: 'guildSoundboardSoundCreate';
+  GUILD_SOUNDBOARD_SOUND_UPDATE: 'guildSoundboardSoundUpdate';
+  GUILD_SOUNDBOARD_SOUND_DELETE: 'guildSoundboardSoundDelete';
+  GUILD_SOUNDBOARD_SOUNDS_UPDATE: 'guildSoundboardSoundsUpdate';
+  SOUNDBOARD_SOUNDS: 'soundboardSounds';
+  INTEGRATION_CREATE: 'integrationCreate';
+  INTEGRATION_UPDATE: 'integrationUpdate';
+  INTEGRATION_DELETE: 'integrationDelete';
+  INTERACTION_CREATE: 'interactionCreate';
+  SUBSCRIPTION_CREATE: 'subscriptionCreate';
+  SUBSCRIPTION_UPDATE: 'subscriptionUpdate';
+  SUBSCRIPTION_DELETE: 'subscriptionDelete';
+  VOICE_CHANNEL_START_TIME_UPDATE: 'voiceChannelStartTimeUpdate';
 }
 
 export interface ConstantsVoiceOpcodes {

@@ -6,7 +6,10 @@ import {
   Message,
   AuthorizingIntegrationOwners,
   Attachment,
+  Colors,
   Embed,
+  Events,
+  Partials,
   ActionRow,
   BaseInteraction,
   ButtonComponent,
@@ -49,6 +52,9 @@ declare const chatInputInteraction: ChatInputCommandInteraction;
 declare const contextInteraction: ContextMenuCommandInteraction;
 declare const selectComponent: StringSelectMenuComponent;
 declare const selectInteraction: StringSelectMenuInteraction;
+Colors.BLURPLE satisfies number;
+Events.CLIENT_READY satisfies string;
+Partials.MESSAGE satisfies string;
 client.options = options;
 client.guilds.fetch('123456789012345678');
 client.channels.cache.forEach(channel => {

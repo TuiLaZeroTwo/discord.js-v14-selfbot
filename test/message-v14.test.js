@@ -144,6 +144,17 @@ test('v14 Embed export retains MessageEmbed behavior', () => {
   assert.equal(embed.title, 'v14 embed');
 });
 
+test('v14 root constants and Partials are exported', () => {
+  const api = require('../src');
+
+  assert.equal(api.Colors, api.Constants.Colors);
+  assert.equal(api.Events, api.Constants.Events);
+  assert.equal(api.ShardEvents, api.Constants.ShardEvents);
+  assert.equal(api.Status, api.Constants.Status);
+  assert.equal(api.Partials.USER, 'USER');
+  assert.equal(api.Partials.MESSAGE, 'MESSAGE');
+});
+
 test('v14 interaction and component names alias legacy structures', () => {
   const api = require('../src');
 
