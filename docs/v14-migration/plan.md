@@ -13,3 +13,13 @@
 11. **Final verification:** run focused tests, `npm test`, API export/type parity checks, and inspect the full branch diff. Keep `js-v14-selfbot` local unless explicitly asked to push.
 
 Each subsystem step is a separate local commit. Stop at incompatible assumptions rather than silently dropping selfbot behavior. Run the smallest affected test first, then full suite after each integration boundary.
+
+## Status
+
+- REST routing/buckets, sublimit queues, abort signals, and rate-limit scope: complete.
+- Gateway identify/intents v10, modern intent flags, close-code handling, and 17 new dispatches: complete.
+- Structures: message metadata, channel helpers, attachment/embed, monetization structures (entitlement, SKU, soundboard sound, subscription), root exports/aliases: complete.
+- Managers: `GuildSoundboardSoundManager` wired; `EntitlementManager`/`SubscriptionManager` exported (application-context only): complete.
+- Voice: DAVE/E2EE intentionally excluded; boundary documented in `voice.md`: complete.
+- Package: Node.js `>=24.17.0`, version `4.0.0`, README compatibility notes: complete.
+- Remaining niceties (specialized select/interaction subclasses, `PartialGroupDMChannel`, docs site) may be ported incrementally.

@@ -18,9 +18,17 @@
 
 ## About
 
-<strong>Welcome to `discord.js-selfbot-v13@v3.7`, based on `discord.js@13.17` and backport `discord.js@14.21.0`</strong>
+<strong>Welcome to `discord.js-selfbot-v13@v4.0`, a selfbot fork migrated to the `discord.js@14` API surface</strong>
 
-- discord.js-selfbot-v13 is a [Node.js](https://nodejs.org) module that allows user accounts to interact with the Discord API v9.
+- discord.js-selfbot-v13 is a [Node.js](https://nodejs.org) module that allows user accounts to interact with the Discord API.
+- v4.0 ports v14 API types, gateway protocol (API v10, modern intents and dispatches), REST routing/rate limits, and v14 structures where compatible with user accounts.
+
+> [!NOTE]
+> **v14 compatibility notes**
+> - Gateway identify now uses API `v10`, top-level `intents`, and a `shard` tuple.
+> - `Entitlement`, `SKU`, `SoundboardSound`, `Subscription`, `Attachment`, and `Embed` structures are available, including `Guild#soundboardSounds`.
+> - v14 `DAVE`/E2EE voice is intentionally not enabled; the selfbot voice transport keeps the legacy `secret_key` encryption. See `docs/v14-migration/voice.md`.
+> - Some v14 application-only APIs (entitlement/subscription managers) require an application context that plain user accounts do not have.
 
 
 <div align="center">
@@ -54,7 +62,7 @@
 ## Installation
 
 > [!NOTE]
-> **Node.js 20.18.0 or newer is required**
+> **Node.js 24.17.0 or newer is required**
 
 ```sh-session
 npm install discord.js-selfbot-v13@latest
