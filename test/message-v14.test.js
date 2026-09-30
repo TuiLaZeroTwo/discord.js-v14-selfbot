@@ -143,3 +143,19 @@ test('v14 Embed export retains MessageEmbed behavior', () => {
   assert.equal(Embed, MessageEmbed);
   assert.equal(embed.title, 'v14 embed');
 });
+
+test('v14 interaction and component names alias legacy structures', () => {
+  const api = require('../src');
+
+  for (const [v14Name, legacyName] of [
+    ['ActionRow', 'MessageActionRow'],
+    ['BaseInteraction', 'Interaction'],
+    ['ButtonComponent', 'MessageButton'],
+    ['ChatInputCommandInteraction', 'CommandInteraction'],
+    ['ContextMenuCommandInteraction', 'ContextMenuInteraction'],
+    ['StringSelectMenuComponent', 'MessageSelectMenu'],
+    ['StringSelectMenuInteraction', 'SelectMenuInteraction'],
+  ]) {
+    assert.equal(api[v14Name], api[legacyName]);
+  }
+});

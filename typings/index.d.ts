@@ -8226,6 +8226,16 @@ export interface WelcomeChannelData {
 export { Channel as BaseChannel };
 export { MessageEmbed as Embed };
 export {
+  MessageActionRow as ActionRow,
+  Interaction as BaseInteraction,
+  MessageButton as ButtonComponent,
+  CommandInteraction as ChatInputCommandInteraction,
+  ContextMenuInteraction as ContextMenuCommandInteraction,
+  MessageSelectMenu as StringSelectMenuComponent,
+  SelectMenuInteraction as StringSelectMenuInteraction,
+  UserContextMenuInteraction as UserContextMenuCommandInteraction,
+};
+export {
   ActivityFlags as ActivityFlagsBitField,
   ApplicationFlags as ApplicationFlagsBitField,
   AttachmentFlags as AttachmentFlagsBitField,

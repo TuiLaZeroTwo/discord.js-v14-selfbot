@@ -7,6 +7,13 @@ import {
   AuthorizingIntegrationOwners,
   Attachment,
   Embed,
+  ActionRow,
+  BaseInteraction,
+  ButtonComponent,
+  ChatInputCommandInteraction,
+  ContextMenuCommandInteraction,
+  StringSelectMenuComponent,
+  StringSelectMenuInteraction,
   BaseChannel,
   IntentsBitField,
   MessagePayload,
@@ -35,6 +42,13 @@ clientWithV14Intents.guilds satisfies GuildManager;
 declare const baseChannel: BaseChannel;
 baseChannel.isTextBased();
 new IntentsBitField(0).has('GUILDS');
+declare const actionRow: ActionRow;
+declare const interaction: BaseInteraction;
+declare const button: ButtonComponent;
+declare const chatInputInteraction: ChatInputCommandInteraction;
+declare const contextInteraction: ContextMenuCommandInteraction;
+declare const selectComponent: StringSelectMenuComponent;
+declare const selectInteraction: StringSelectMenuInteraction;
 client.options = options;
 client.guilds.fetch('123456789012345678');
 client.channels.cache.forEach(channel => {
