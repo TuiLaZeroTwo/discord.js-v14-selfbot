@@ -150,6 +150,31 @@ test('SoundboardSound maps v14 fields and equals raw payload', () => {
   client.destroy();
 });
 
+test('v14 specialized select components and interactions are exported', () => {
+  const api = require('../src');
+
+  for (const name of [
+    'BaseSelectMenuComponent',
+    'ChannelSelectMenuComponent',
+    'MentionableSelectMenuComponent',
+    'RoleSelectMenuComponent',
+    'StringSelectMenuComponent',
+    'UserSelectMenuComponent',
+  ]) {
+    assert.equal(api[name], api.MessageSelectMenu);
+  }
+
+  for (const name of [
+    'ChannelSelectMenuInteraction',
+    'MentionableSelectMenuInteraction',
+    'RoleSelectMenuInteraction',
+    'StringSelectMenuInteraction',
+    'UserSelectMenuInteraction',
+  ]) {
+    assert.equal(api[name], api.SelectMenuInteraction);
+  }
+});
+
 test('ActivityLocation and ActivityInstance map v14 fields', () => {
   const client = new Client({ intents: 0 });
   const location = new ActivityLocation(client, {

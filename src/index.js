@@ -221,8 +221,17 @@ exports.Widget = require('./structures/Widget');
 exports.WidgetMember = require('./structures/WidgetMember');
 exports.WelcomeChannel = require('./structures/WelcomeChannel');
 exports.WelcomeScreen = require('./structures/WelcomeScreen');
+exports.BaseSelectMenuComponent = exports.MessageSelectMenu;
+exports.ChannelSelectMenuComponent = exports.MessageSelectMenu;
+exports.MentionableSelectMenuComponent = exports.MessageSelectMenu;
+exports.RoleSelectMenuComponent = exports.MessageSelectMenu;
 exports.StringSelectMenuComponent = exports.MessageSelectMenu;
-exports.StringSelectMenuInteraction = require('./structures/SelectMenuInteraction');
+exports.UserSelectMenuComponent = exports.MessageSelectMenu;
+exports.ChannelSelectMenuInteraction = exports.SelectMenuInteraction;
+exports.MentionableSelectMenuInteraction = exports.SelectMenuInteraction;
+exports.RoleSelectMenuInteraction = exports.SelectMenuInteraction;
+exports.StringSelectMenuInteraction = exports.SelectMenuInteraction;
+exports.UserSelectMenuInteraction = exports.SelectMenuInteraction;
 
 exports.WebSocket = require('./WebSocket');
 
