@@ -4445,6 +4445,14 @@ export const Constants: {
 
 export const version: string;
 
+export const cleanCodeBlockContent: typeof Util.cleanCodeBlockContent;
+export const cleanContent: typeof Util.cleanContent;
+export const discordSort: typeof Util.discordSort;
+export const flatten: typeof Util.flatten;
+export const parseEmoji: typeof Util.parseEmoji;
+export const resolveColor: typeof Util.resolveColor;
+export const verifyString: typeof Util.verifyString;
+
 export const Colors: ConstantsColors;
 export const Events: ConstantsEvents;
 export const ShardEvents: ConstantsShardEvents;

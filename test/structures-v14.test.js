@@ -142,6 +142,20 @@ test('SoundboardSound maps v14 fields and equals raw payload', () => {
   client.destroy();
 });
 
+test('v14 root util helpers and thread managers are exported', () => {
+  const api = require('../src');
+
+  assert.equal(api.flatten, api.Util.flatten);
+  assert.equal(api.parseEmoji, api.Util.parseEmoji);
+  assert.equal(api.resolveColor, api.Util.resolveColor);
+  assert.equal(api.discordSort, api.Util.discordSort);
+  assert.equal(api.cleanContent, api.Util.cleanContent);
+  assert.equal(api.cleanCodeBlockContent, api.Util.cleanCodeBlockContent);
+  assert.equal(api.verifyString, api.Util.verifyString);
+  assert.equal(typeof api.GuildTextThreadManager, 'function');
+  assert.equal(typeof api.GuildForumThreadManager, 'function');
+});
+
 test('GuildSoundboardSoundManager routes v14 soundboard endpoints', async () => {
   const soundId = '123456789012345678';
   const { client, requests } = makeSoundboardClient(soundId);

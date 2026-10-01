@@ -24,6 +24,9 @@ import {
   GuildSoundboardSoundManager,
   EntitlementManager,
   SubscriptionManager,
+  flatten,
+  parseEmoji,
+  resolveColor,
   BaseChannel,
   IntentsBitField,
   MessagePayload,
@@ -74,6 +77,9 @@ declare const entitlementManager: EntitlementManager;
 entitlementManager.consume('123456789012345678');
 declare const subscriptionManager: SubscriptionManager;
 subscriptionManager.fetch({ sku: '123456789012345678' });
+flatten({ nested: { a: 1 } });
+parseEmoji('<:name:123456789012345678>');
+resolveColor('#5865F2');
 Colors.BLURPLE satisfies number;
 Events.CLIENT_READY satisfies string;
 Partials.MESSAGE satisfies string;
