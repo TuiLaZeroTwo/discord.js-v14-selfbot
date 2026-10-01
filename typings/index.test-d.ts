@@ -27,6 +27,8 @@ import {
   flatten,
   parseEmoji,
   resolveColor,
+  DiscordjsError,
+  PartialGroupDMChannel,
   BaseChannel,
   IntentsBitField,
   MessagePayload,
@@ -80,6 +82,9 @@ subscriptionManager.fetch({ sku: '123456789012345678' });
 flatten({ nested: { a: 1 } });
 parseEmoji('<:name:123456789012345678>');
 resolveColor('#5865F2');
+new DiscordjsError('TokenInvalid');
+declare const partialGroupDM: PartialGroupDMChannel;
+partialGroupDM.type satisfies string;
 Colors.BLURPLE satisfies number;
 Events.CLIENT_READY satisfies string;
 Partials.MESSAGE satisfies string;

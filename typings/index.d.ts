@@ -28,6 +28,7 @@ import {
   APIApplicationCommandPermission,
   APIAuditLogChange,
   APIAttachment,
+  ActivityLocationKind,
   APIButtonComponent,
   APIEmbed,
   APIEmoji,
@@ -129,6 +130,8 @@ import {
   APIAutoModerationRule,
   GatewayAutoModerationActionExecutionDispatchData,
   RawActivityData,
+  RawActivityInstanceData,
+  RawActivityLocationData,
   RawAnonymousGuildData,
   RawApplicationCommandData,
   RawApplicationData,
@@ -309,6 +312,25 @@ export class Activity {
   public equals(activity: Activity): boolean;
   public toJSON(): ActivityOptions;
   public toString(): string;
+}
+
+export class ActivityInstance extends Base {
+  private constructor(client: Client, data: RawActivityInstanceData);
+  public applicationId: Snowflake;
+  public instanceId: string;
+  public launchId: Snowflake;
+  public location: ActivityLocation;
+  public users: Snowflake[];
+}
+
+export class ActivityLocation extends Base {
+  private constructor(client: Client, data: RawActivityLocationData);
+  public id: string;
+  public kind: ActivityLocationKind;
+  public channelId: Snowflake;
+  public guildId: Snowflake | null;
+  public readonly channel: Channel | null;
+  public readonly guild: Guild | null;
 }
 
 export class ActivityFlags extends BitField<ActivityFlagsString> {
@@ -4445,6 +4467,12 @@ export const Constants: {
 
 export const version: string;
 
+export type DiscordjsErrorConstructor = new (key: string, ...args: unknown[]) => Error;
+
+export const DiscordjsError: DiscordjsErrorConstructor;
+export const DiscordjsTypeError: DiscordjsErrorConstructor;
+export const DiscordjsRangeError: DiscordjsErrorConstructor;
+
 export const cleanCodeBlockContent: typeof Util.cleanCodeBlockContent;
 export const cleanContent: typeof Util.cleanContent;
 export const discordSort: typeof Util.discordSort;
@@ -8443,6 +8471,7 @@ export {
   MessageSelectMenu as StringSelectMenuComponent,
   SelectMenuInteraction as StringSelectMenuInteraction,
   UserContextMenuInteraction as UserContextMenuCommandInteraction,
+  GroupDMChannel as PartialGroupDMChannel,
 };
 export {
   ActivityFlags as ActivityFlagsBitField,

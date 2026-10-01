@@ -8,6 +8,12 @@ exports.ShardClientUtil = require('./sharding/ShardClientUtil');
 exports.ShardingManager = require('./sharding/ShardingManager');
 exports.WebhookClient = require('./client/WebhookClient');
 
+// Errors
+const Errors = require('./errors');
+exports.DiscordjsError = Errors.Error;
+exports.DiscordjsTypeError = Errors.TypeError;
+exports.DiscordjsRangeError = Errors.RangeError;
+
 // Utilities
 exports.ActivityFlags = require('./util/ActivityFlags');
 exports.ActivityFlagsBitField = exports.ActivityFlags;
@@ -109,6 +115,8 @@ exports.UserNoteManager = require('./managers/UserNoteManager');
 
 // Structures
 exports.Activity = require('./structures/Presence').Activity;
+exports.ActivityInstance = require('./structures/ActivityInstance');
+exports.ActivityLocation = require('./structures/ActivityLocation');
 exports.AnonymousGuild = require('./structures/AnonymousGuild');
 exports.Application = require('./structures/interfaces/Application');
 exports.ApplicationCommand = require('./structures/ApplicationCommand');
@@ -178,6 +186,7 @@ exports.ModalSubmitInteraction = require('./structures/ModalSubmitInteraction');
 exports.NewsChannel = require('./structures/NewsChannel');
 exports.OAuth2Guild = require('./structures/OAuth2Guild');
 exports.GroupDMChannel = require('./structures/GroupDMChannel');
+exports.PartialGroupDMChannel = exports.GroupDMChannel;
 exports.PermissionOverwrites = require('./structures/PermissionOverwrites');
 exports.Presence = require('./structures/Presence').Presence;
 exports.ReactionCollector = require('./structures/ReactionCollector');

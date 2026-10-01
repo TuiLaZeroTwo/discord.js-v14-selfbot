@@ -91,6 +91,8 @@ import {
   LocalizationMap,
   APIActionRowComponent,
   APIComponentInMessageActionRow,
+  APIActivityInstance,
+  APIActivityLocation,
   APIEntitlement,
   APISKU,
   APISoundboardSound,
@@ -132,6 +134,10 @@ export type RawEmojiData =
   | Omit<Partial<APIPartialEmoji>, 'animated'>;
 export type RawGuildEmojiData = APIEmoji;
 export type RawReactionEmojiData = APIEmoji | APIPartialEmoji;
+
+export type RawActivityInstanceData = APIActivityInstance;
+
+export type RawActivityLocationData = APIActivityLocation;
 
 export type RawEntitlementData = APIEntitlement;
 

@@ -3,7 +3,15 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 const { Collection } = require('@discordjs/collection');
-const { Entitlement, SKU, SKUFlags, SoundboardSound, Subscription } = require('../src');
+const {
+  ActivityInstance,
+  ActivityLocation,
+  Entitlement,
+  SKU,
+  SKUFlags,
+  SoundboardSound,
+  Subscription,
+} = require('../src');
 const Client = require('../src/client/Client');
 const GuildSoundboardSoundManager = require('../src/managers/GuildSoundboardSoundManager');
 const buildRoute = require('../src/rest/APIRouter');
@@ -140,6 +148,41 @@ test('SoundboardSound maps v14 fields and equals raw payload', () => {
   assert.ok(sound.createdTimestamp > 0);
   assert.equal(sound.equals(data), true);
   client.destroy();
+});
+
+test('ActivityLocation and ActivityInstance map v14 fields', () => {
+  const client = new Client({ intents: 0 });
+  const location = new ActivityLocation(client, {
+    id: 'location-id',
+    kind: 0,
+    channel_id: '123456789012345678',
+    guild_id: '223456789012345678',
+  });
+  const instance = new ActivityInstance(client, {
+    application_id: '323456789012345678',
+    instance_id: 'instance-id',
+    launch_id: '423456789012345678',
+    location: { id: 'location-id', kind: 0, channel_id: '123456789012345678' },
+    users: ['523456789012345678'],
+  });
+
+  assert.equal(location.channelId, '123456789012345678');
+  assert.equal(location.guildId, '223456789012345678');
+  assert.equal(instance.applicationId, '323456789012345678');
+  assert.equal(instance.instanceId, 'instance-id');
+  assert.ok(instance.location instanceof ActivityLocation);
+  assert.deepEqual(instance.users, ['523456789012345678']);
+  client.destroy();
+});
+
+test('v14 error classes and PartialGroupDMChannel are exported', () => {
+  const api = require('../src');
+  const errors = require('../src/errors');
+
+  assert.equal(api.DiscordjsError, errors.Error);
+  assert.equal(api.DiscordjsTypeError, errors.TypeError);
+  assert.equal(api.DiscordjsRangeError, errors.RangeError);
+  assert.equal(api.PartialGroupDMChannel, api.GroupDMChannel);
 });
 
 test('v14 root util helpers and thread managers are exported', () => {
