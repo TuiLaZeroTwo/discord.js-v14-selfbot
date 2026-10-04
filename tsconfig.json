@@ -15,7 +15,6 @@
         "useUnknownInCatchVariables": true,
         // Modules
         "module": "CommonJS",
-        "moduleResolution": "node",
         "resolveJsonModule": true,
         // Emit
         "declaration": false,
