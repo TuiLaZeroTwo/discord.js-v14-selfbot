@@ -1,7 +1,7 @@
 {
-  "name": "discord.js-selfbot-v13",
+  "name": "discord.js-v14-selfbot",
   "version": "4.0.0",
-  "description": "An unofficial discord.js fork for creating selfbots",
+  "description": "An unofficial discord.js v14 fork for creating selfbots",
   "main": "./src/index.js",
   "types": "./typings/index.d.ts",
   "scripts": {
@@ -29,13 +29,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aiko-chan-ai/discord.js-selfbot-v13.git"
+    "url": "git+https://github.com/TuiLaZeroTwo/djssb.git"
   },
   "keywords": [
     "discord.js",
-    "discord.js v13",
+    "discord.js v14",
     "selfbot",
-    "selfbot v13",
+    "selfbot v14",
+    "discord.js-v14-selfbot",
     "djs",
     "api",
     "bot",
@@ -47,9 +48,9 @@
   "author": "aiko-chan-ai",
   "license": "GNU General Public License v3.0",
   "bugs": {
-    "url": "https://github.com/aiko-chan-ai/discord.js-selfbot-v13/issues"
+    "url": "https://github.com/TuiLaZeroTwo/djssb/issues"
   },
-  "homepage": "https://github.com/aiko-chan-ai/discord.js-selfbot-v13#readme",
+  "homepage": "https://github.com/TuiLaZeroTwo/djssb#readme",
   "dependencies": {
     "@discordjs/builders": "^1.6.3",
     "@discordjs/collection": "^2.1.1",

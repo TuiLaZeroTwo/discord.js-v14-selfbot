@@ -18,9 +18,9 @@
 
 ## About
 
-<strong>Welcome to `discord.js-selfbot-v13@v4.0`, a selfbot fork migrated to the `discord.js@14` API surface</strong>
+<strong>Welcome to `discord.js-v14-selfbot@v4.0`, a selfbot fork migrated to the `discord.js@14` API surface</strong>
 
-- discord.js-selfbot-v13 is a [Node.js](https://nodejs.org) module that allows user accounts to interact with the Discord API.
+- discord.js-v14-selfbot is a [Node.js](https://nodejs.org) module that allows user accounts to interact with the Discord API.
 - v4.0 ports v14 API types, gateway protocol (API v10, modern intents and dispatches), REST routing/rate limits, and v14 structures where compatible with user accounts.
 
 > [!NOTE]
@@ -33,9 +33,9 @@
 
 <div align="center">
   <p>
-    <a href="https://www.npmjs.com/package/discord.js-selfbot-v13"><img src="https://img.shields.io/npm/v/discord.js-selfbot-v13.svg" alt="npm version" /></a>
-    <a href="https://www.npmjs.com/package/discord.js-selfbot-v13"><img src="https://img.shields.io/npm/dt/discord.js-selfbot-v13.svg" alt="npm downloads" /></a>
-    <a href="https://github.com/aiko-chan-ai/discord.js-selfbot-v13/actions"><img src="https://github.com/aiko-chan-ai/discord.js-selfbot-v13/actions/workflows/lint.yml/badge.svg" alt="Tests status" /></a>
+    <a href="https://www.npmjs.com/package/discord.js-v14-selfbot"><img src="https://img.shields.io/npm/v/discord.js-v14-selfbot.svg" alt="npm version" /></a>
+    <a href="https://www.npmjs.com/package/discord.js-v14-selfbot"><img src="https://img.shields.io/npm/dt/discord.js-v14-selfbot.svg" alt="npm downloads" /></a>
+    <a href="https://github.com/TuiLaZeroTwo/djssb/actions"><img src="https://github.com/TuiLaZeroTwo/djssb/actions/workflows/lint.yml/badge.svg" alt="Tests status" /></a>
   </p>
 </div>
 
@@ -47,7 +47,7 @@
 
 ### <strong>[Document Website](https://discordjs-self-v13.netlify.app/)</strong>
 
-### <strong>[Example Code](https://github.com/aiko-chan-ai/discord.js-selfbot-v13/tree/main/examples)</strong>
+### <strong>[Example Code](https://github.com/TuiLaZeroTwo/djssb/tree/main/examples)</strong>
 
 ## Features (User)
 - [x] Message
@@ -65,13 +65,13 @@
 > **Node.js 24.17.0 or newer is required**
 
 ```sh-session
-npm install discord.js-selfbot-v13@latest
+npm install discord.js-v14-selfbot@latest
 ```
 
 ## Example
 
 ```js
-const { Client } = require('discord.js-selfbot-v13');
+const { Client } = require('discord.js-v14-selfbot');
 const client = new Client();
 
 client.on('ready', async () => {
@@ -117,7 +117,7 @@ console.log(`%cYou now have your token in the clipboard!`, 'font-size: 16px');
 - See [the contribution guide](https://github.com/discordjs/discord.js/blob/main/.github/CONTRIBUTING.md) if you'd like to submit a PR.
 
 ## Need help?
-Github Discussion: [Here](https://github.com/aiko-chan-ai/discord.js-selfbot-v13/discussions)
+Github Discussion: [Here](https://github.com/TuiLaZeroTwo/djssb/discussions)
 
 ## Credits
 - [Discord.js](https://github.com/discordjs/discord.js)
@@ -129,4 +129,4 @@ Github Discussion: [Here](https://github.com/aiko-chan-ai/discord.js-selfbot-v13
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=aiko-chan-ai/discord.js-selfbot-v13&type=Date)](https://star-history.com/#aiko-chan-ai/discord.js-selfbot-v13&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=TuiLaZeroTwo/djssb&type=Date)](https://star-history.com/#TuiLaZeroTwo/djssb&Date)
