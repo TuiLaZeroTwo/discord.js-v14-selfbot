@@ -7,6 +7,9 @@ const {
   ActivityInstance,
   ActivityLocation,
   Entitlement,
+  InteractionCallback,
+  InteractionCallbackResource,
+  InteractionCallbackResponse,
   SKU,
   SKUFlags,
   SoundboardSound,
@@ -147,6 +150,33 @@ test('SoundboardSound maps v14 fields and equals raw payload', () => {
   assert.equal(sound.available, true);
   assert.ok(sound.createdTimestamp > 0);
   assert.equal(sound.equals(data), true);
+  client.destroy();
+});
+
+test('InteractionCallback response structures map v14 fields', () => {
+  const client = new Client({ intents: 0 });
+  const callback = new InteractionCallback(client, {
+    id: '123456789012345678',
+    type: 2,
+    activity_instance_id: 'instance-id',
+    response_message_id: '223456789012345678',
+    response_message_loading: true,
+    response_message_ephemeral: false,
+  });
+  const resource = new InteractionCallbackResource(client, { type: 4, activity_instance: { id: 'instance-id' } });
+  const response = new InteractionCallbackResponse(client, {
+    interaction: { id: '123456789012345678', type: 2 },
+    resource: { type: 4, activity_instance: { id: 'instance-id' } },
+  });
+
+  assert.equal(callback.type, 2);
+  assert.equal(callback.activityInstanceId, 'instance-id');
+  assert.equal(callback.responseMessageLoading, true);
+  assert.ok(callback.createdTimestamp > 0);
+  assert.equal(resource.type, 4);
+  assert.equal(resource.activityInstance.id, 'instance-id');
+  assert.ok(response.interaction instanceof InteractionCallback);
+  assert.ok(response.resource instanceof InteractionCallbackResource);
   client.destroy();
 });
 
