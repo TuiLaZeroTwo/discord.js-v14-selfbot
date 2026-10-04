@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TuiLaZeroTwo/djssb.git"
+    "url": "git+https://github.com/TuiLaZeroTwo/discord.js-v14-selfbot.git"
   },
   "keywords": [
     "discord.js",
@@ -48,9 +48,9 @@
   "author": "aiko-chan-ai",
   "license": "GNU General Public License v3.0",
   "bugs": {
-    "url": "https://github.com/TuiLaZeroTwo/djssb/issues"
+    "url": "https://github.com/TuiLaZeroTwo/discord.js-v14-selfbot/issues"
   },
-  "homepage": "https://github.com/TuiLaZeroTwo/djssb#readme",
+  "homepage": "https://github.com/TuiLaZeroTwo/discord.js-v14-selfbot#readme",
   "dependencies": {
     "@discordjs/builders": "^1.6.3",
     "@discordjs/collection": "^2.1.1",
