@@ -222,7 +222,7 @@ class MessageAttachment {
   get spoiler() {
     return Boolean(
       this.flags?.has(AttachmentFlags.FLAGS.SPOILER) ||
-        (this.url ?? this.name)?.split('/').pop()?.startsWith('SPOILER_'),
+      (this.url ?? this.name)?.split('/').pop()?.startsWith('SPOILER_'),
     );
   }
 

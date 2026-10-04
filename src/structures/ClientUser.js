@@ -18,11 +18,14 @@ class ClientUser extends User {
   #intervalSamsungPresence = null;
 
   #startSamsungKeepalive() {
-    this.#intervalSamsungPresence ??= setInterval(() => {
-      this.client.emit('debug', `[UPDATE] Samsung Presence: ${this.#packageName}`);
-      if (!this.#packageName) return;
-      this.setSamsungActivity(this.#packageName, 'UPDATE');
-    }, 1000 * 60 * 10).unref();
+    this.#intervalSamsungPresence ??= setInterval(
+      () => {
+        this.client.emit('debug', `[UPDATE] Samsung Presence: ${this.#packageName}`);
+        if (!this.#packageName) return;
+        this.setSamsungActivity(this.#packageName, 'UPDATE');
+      },
+      1000 * 60 * 10,
+    ).unref();
   }
 
   _patch(data) {

@@ -189,7 +189,7 @@ class MessagePayload {
     let message_reference;
     if (typeof this.options.reply === 'object') {
       const reference = this.options.reply.messageReference;
-      const message_id = this.isMessage ? reference.id ?? reference : this.target.messages.resolveId(reference);
+      const message_id = this.isMessage ? (reference.id ?? reference) : this.target.messages.resolveId(reference);
       if (message_id) {
         message_reference = {
           message_id,
@@ -363,7 +363,7 @@ function containsComponentsV2(component) {
   if (component?.type === 17 || component?.type === 'CONTAINER') return true;
   return Boolean(
     component?.components?.some(containsComponentsV2) ||
-      (component?.accessory && containsComponentsV2(component.accessory)),
+    (component?.accessory && containsComponentsV2(component.accessory)),
   );
 }
 
