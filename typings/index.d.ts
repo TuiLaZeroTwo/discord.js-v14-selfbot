@@ -74,7 +74,6 @@ import { AgentOptions } from 'node:https';
 import { Response, ProxyAgent } from 'undici';
 import { Readable, Writable, Stream } from 'node:stream';
 import { MessagePort, Worker } from 'node:worker_threads';
-import { authenticator } from 'otplib';
 import { CookieJar } from 'tough-cookie';
 import { RtpPacket } from 'werift-rtp';
 import * as WebSocket from 'ws';
@@ -878,10 +877,21 @@ export abstract class Channel extends Base {
 
 export type If<T extends boolean, A, B = null> = T extends true ? A : T extends false ? B : A | B;
 
+export interface AuthenticatorOptions {
+  step: number;
+  digits: number;
+  algorithm: string;
+}
+
+export interface Authenticator {
+  options: AuthenticatorOptions;
+  generate(secret: string): string;
+}
+
 export class Client<Ready extends boolean = boolean> extends BaseClient {
   public constructor(options?: ClientOptions);
   private actions: unknown;
-  public authenticator: typeof authenticator;
+  public authenticator: Authenticator;
   private presence: ClientPresence;
   private _eval(script: string): unknown;
   private _validateOptions(options: ClientOptions): void;

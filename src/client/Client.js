@@ -5,7 +5,7 @@ const process = require('node:process');
 const { setInterval } = require('node:timers');
 const { setTimeout } = require('node:timers');
 const { Collection } = require('@discordjs/collection');
-const { authenticator } = require('otplib');
+const { generateSync, createGuardrails } = require('otplib');
 const BaseClient = require('./BaseClient');
 const ActionsManager = require('./actions/ActionsManager');
 const ClientVoiceManager = require('./voice/ClientVoiceManager');
@@ -199,12 +199,16 @@ class Client extends BaseClient {
      * The authenticator used for TOTP
      * @type {Object}
      */
-    this.authenticator = authenticator;
-
-    this.authenticator.options = {
-      step: 30,
-      digits: 6,
-      algorithm: 'sha1',
+    this.authenticator = {
+      options: { step: 30, digits: 6, algorithm: 'sha1' },
+      generate: secret =>
+        generateSync({
+          secret,
+          period: this.authenticator.options.step,
+          digits: this.authenticator.options.digits,
+          algorithm: this.authenticator.options.algorithm,
+          guardrails: createGuardrails({ MIN_SECRET_BYTES: 10 }),
+        }),
     };
 
     if (this.options.messageSweepInterval > 0) {
